@@ -9,6 +9,4 @@ public class NutrimealApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NutrimealApplication.class, args);
 	}
-
-	
 }

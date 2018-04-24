@@ -1,9 +1,9 @@
-package repository;
+package com.example.nutrimeal.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import entity.Instruction;
+import com.example.nutrimeal.model.Instruction;
 
 @Repository
 public interface InstructionRepository extends JpaRepository<Instruction, Long>{
