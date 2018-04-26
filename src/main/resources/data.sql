@@ -5,6 +5,9 @@ VALUES (1, 'Lasagnes', 50, 37, 120);
 INSERT INTO recette(id_recette, nom_recette, min_par_por, vit_par_por, temps_prepa)
 VALUES (2, 'Sandwich à la fraise', 60, 80, 110);
 
+INSERT INTO recette(id_recette, nom_recette, min_par_por, vit_par_por, temps_prepa)
+VALUES (3, 'Banane au miel', 80, 90, 120);
+
 -- INGREDIENTS
 INSERT INTO ingredient(id_ingredient, libelle, unite_mesure, vitamines, mineraux)
 VALUES (1, 'Pomme de terre', 'g', 150.46, 20.45);

@@ -24,6 +24,10 @@ public class RecetteService {
 		return recetteRepository.findById(id);
 	}
 
+	/** Récupère une page de résultat de recette contenant la chaine recherchée.
+	 * @param string la chaine recherchée
+	 * @param pageable les paramètres de pagination
+	 * @return la liste des recettes correspondant à la recherche*/
 	public Page<Recette> findRecetteContaining(String string, Pageable pageable) {
 		return recetteRepository.findByNomRecetteContainsIgnoreCaseOrderByNomRecette(pageable, string);
 	}

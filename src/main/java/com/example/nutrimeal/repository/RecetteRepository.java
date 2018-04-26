@@ -16,5 +16,4 @@ public interface RecetteRepository extends PagingAndSortingRepository<Recette, L
 	 * @param string la chaine de caractère
 	 * @return la page demandée */
 	Page<Recette> findByNomRecetteContainsIgnoreCaseOrderByNomRecette(Pageable pageable, String string);
-	
 }
