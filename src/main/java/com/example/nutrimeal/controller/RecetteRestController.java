@@ -53,7 +53,7 @@ public class RecetteRestController {
 	 * @return une réponse HTTP avec les recette tirées au hasard*/
 	@RequestMapping(value = "/withimages", method = RequestMethod.GET)
 	public ResponseEntity<Set<Recette>> findRecettesWithImages() {
-		Set<Recette> recette = recetteService.findRandomRecettesWithImages();
-		
+		Set<Recette> recettes = recetteService.findRandomRecettesWithImages();
+		return new ResponseEntity<>(recettes, HttpStatus.OK);
 	}
 }

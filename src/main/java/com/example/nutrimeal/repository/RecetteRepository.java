@@ -21,5 +21,5 @@ public interface RecetteRepository extends PagingAndSortingRepository<Recette, L
 	Page<Recette> findByNomContainsIgnoreCaseOrderByNom(Pageable pageable, String string);
 
 	/** Récupère la liste des recettes ayant une image.*/
-	List<Recette> findByBase64ImageCodeNotNull();
+	Page<Recette> findByBase64ImageCodeNotNull(Pageable pageable);
 }
