@@ -1,5 +1,8 @@
 package com.example.nutrimeal.repository;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +19,7 @@ public interface RecetteRepository extends PagingAndSortingRepository<Recette, L
 	 * @param string la chaine de caractère
 	 * @return la page demandée */
 	Page<Recette> findByNomContainsIgnoreCaseOrderByNom(Pageable pageable, String string);
+
+	/** Récupère la liste des recettes ayant une image.*/
+	List<Recette> findByBase64ImageCodeNotNull();
 }

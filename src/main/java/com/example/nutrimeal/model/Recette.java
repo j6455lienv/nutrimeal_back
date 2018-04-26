@@ -31,4 +31,7 @@ public class Recette {
 	
 	@Column(name = "temps_prepa" )
 	private Integer tempsPreparation;
+	
+	@Column(name = "image_recette")
+	private String base64ImageCode;
 }

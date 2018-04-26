@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class RecetteRestController {
 	/** Renvoi une liste de recette dont le nom contient une chaine de caractère.
 	 * @param string la string à rechercher
 	 * @return une réponse HTTP avec la liste des recettes persistées contenant la chaine de caractère dans leur libellé*/
-	@RequestMapping(value = "/search")
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<Page<Recette>> searchRecette(@RequestParam String string, Pageable pageable) {
 		Page<Recette> result = recetteService.findRecetteContaining(string, pageable);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -37,7 +38,7 @@ public class RecetteRestController {
 	/** Renvoi la recette persistée demandée par une requête.
 	 * @param id l'id de la recette
 	 * @return une réponse HTTP avec la recette serialisée*/
-	@RequestMapping(value = "/{id}")
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Recette> findThisRecette(@PathVariable("id") Long id ) {
 		Optional<Recette> recette = recetteService.get(id);
 		if (recette.isPresent()) {
@@ -46,5 +47,13 @@ public class RecetteRestController {
 		else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	/**  Renvoi un ensemble aléatoire de recettes qui ont une image. Pour le carroussel.
+	 * @return une réponse HTTP avec les recette tirées au hasard*/
+	@RequestMapping(value = "/withimages", method = RequestMethod.GET)
+	public ResponseEntity<Set<Recette>> findRecettesWithImages() {
+		Set<Recette> recette = recetteService.findRandomRecettesWithImages();
+		
 	}
 }

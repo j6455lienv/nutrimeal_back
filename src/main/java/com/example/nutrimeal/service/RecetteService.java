@@ -1,5 +1,6 @@
 package com.example.nutrimeal.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,4 +33,18 @@ public class RecetteService {
 		return recetteRepository.findByNomContainsIgnoreCaseOrderByNom(pageable, string);
 	}
 
+	public Set<Recette> findRandomRecettesWithImages() {
+		List<Recette> recetteListe = recetteRepository.findByBase64ImageCodeNotNull();7
+		int size = recetteListe.size();
+		int randomIndex;
+		int i = 0;
+		
+		while (i < 5) {
+			randomIndex = (int) Math.round(Math.random() * size);
+			recetteListe.get
+			i++;
+		}
+
+		return null;
+	}
 }
