@@ -29,7 +29,7 @@ public class RecetteService {
 	 * @param pageable les paramètres de pagination
 	 * @return la liste des recettes correspondant à la recherche*/
 	public Page<Recette> findRecetteContaining(String string, Pageable pageable) {
-		return recetteRepository.findByNomRecetteContainsIgnoreCaseOrderByNomRecette(pageable, string);
+		return recetteRepository.findByNomContainsIgnoreCaseOrderByNom(pageable, string);
 	}
 
 }

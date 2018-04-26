@@ -18,10 +18,10 @@ public class Recette {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_recette")
-    private Long idRecette;
+    private Long id;
 	
 	@Column(name = "nom_recette")
-	private String nomRecette;
+	private String nom;
 	
 	@Column(name = "min_par_por")
 	private Double minerauxParPortion;

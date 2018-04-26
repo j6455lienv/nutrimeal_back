@@ -16,7 +16,8 @@ public class Instruction {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idInstruction;
+	@Column(name = "id_instruction")
+    private Long id;
 	
 	@Column
 	private Long chrono;
@@ -24,6 +25,6 @@ public class Instruction {
 	@Column
 	private String libelle;
 	
-	@Column
-	private Long idRecette;
+	@Column(name = "id_recette")
+	private Long recetteId;
 }

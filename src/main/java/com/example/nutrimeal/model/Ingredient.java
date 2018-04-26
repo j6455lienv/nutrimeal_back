@@ -16,12 +16,13 @@ public class Ingredient {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idIngredient;
+	@Column(name = "id_ingredient")
+    private Long id;
 	
 	@Column
 	private String libelle;
 
-	@Column
+	@Column(name = "unite_mesure")
 	private String uniteMesure;
 	
 	@Column
