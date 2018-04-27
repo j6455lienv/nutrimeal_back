@@ -23,6 +23,8 @@ public class RecetteService {
 	
 	/** Nombre de recettes aléatoirement tirées de la base pour le carroussel.*/
 	private static final int CARROUSSEL_RECETTE_NUMBER = 10;
+	
+	private static final int CARROUSSEL_ELEMENT_PAR_PAGE = 10;
 
 	/** Récupère une recette persistée à partir de son id.
 	 * @param id l'id de la recette
@@ -44,30 +46,29 @@ public class RecetteService {
 	public Set<Recette> findRandomRecettesWithImages() {
 		Set<Recette> result = new HashSet<>();
 		
-		Pageable pageable = new PageRequest(1,20);
+		Pageable pageable = new PageRequest(0,CARROUSSEL_ELEMENT_PAR_PAGE);
 		Page<Recette> recetteListe = recetteRepository.findByBase64ImageCodeNotNull(pageable);
-		int elementPerPage = recetteListe.getNumberOfElements();
 		int totalNumberOfElements = (int) recetteListe.getTotalElements();
+		
+		if (totalNumberOfElements == 0) {
+			return new HashSet<Recette>();
+		}
 		
 		int randomIndex;
 		int askedPage;
 		int elementIndexInPage;
 		List<Recette> pageContent;
 		
-		int i = 0;
-		
-		while (i < CARROUSSEL_RECETTE_NUMBER) {
-			randomIndex = (int) Math.round(Math.random() * totalNumberOfElements);
-			askedPage = (int) Math.ceil(randomIndex / elementPerPage);
-			recetteListe = recetteRepository.findByBase64ImageCodeNotNull(new PageRequest(askedPage, elementPerPage));
+		while (result.size() < 10) {
+			randomIndex = (int) Math.round(Math.random() * (totalNumberOfElements-1));
+			askedPage = (int) Math.floor(randomIndex / CARROUSSEL_ELEMENT_PAR_PAGE);
+			recetteListe = recetteRepository.findByBase64ImageCodeNotNull(new PageRequest(askedPage, CARROUSSEL_ELEMENT_PAR_PAGE));
 			
 			pageContent = recetteListe.getContent();
-			elementIndexInPage = randomIndex % elementPerPage;
+			elementIndexInPage = randomIndex % CARROUSSEL_ELEMENT_PAR_PAGE;
 			
 			result.add(pageContent.get(elementIndexInPage));
-			i++;
 		}
-
 		return result;
 	}
 }
