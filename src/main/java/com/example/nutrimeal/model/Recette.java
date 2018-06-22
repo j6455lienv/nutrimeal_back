@@ -1,34 +1,50 @@
 package com.example.nutrimeal.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
 
 
-@Entity
-@Getter
-@Setter
+@Entity(name = "RECETTE")
 public class Recette {
 
-	@Id
+	@Getter
+	@Setter
+	@Id 
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_recette")
-    private Long idRecette;
-	
-	@Column(name = "nom_recette")
+	@Column(name = "ID_RECETTE")
+    public Long idRecette;	
+
+	@Getter
+	@Setter
+    @OneToMany(mappedBy="recette")
+    public Set<RecetteIngredient> recetteIngredients = new HashSet<>();
+
+	@Getter
+	@Setter
+	@Column(name = "NOM_RECETTE")
 	private String nomRecette;
 	
-	@Column(name = "min_par_por")
+	@Getter
+	@Setter
+	@Column(name = "TEMPS_PREPARATION")
+	private Integer tempsPreparation;
+	
+	@Getter
+	@Setter
 	private Double minerauxParPortion;
 	
-	@Column(name = "vit_par_por")
+	@Getter
+	@Setter
 	private Double vitaminesParPortion;
 	
-	@Column(name = "temps_prepa" )
-	private Integer tempsPreparation;
 }
