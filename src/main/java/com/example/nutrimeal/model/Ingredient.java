@@ -35,11 +35,6 @@ public class Ingredient {
 	@Setter
 	@Column
 	private String libelle;
-	
-	@Getter
-	@Setter
-	@Column
-	private Double quantite;
 
 	@Getter
 	@Setter

@@ -16,20 +16,16 @@ public class Instruction {
 	@Setter
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID_INSTRUCTION")
     private Long idInstruction;
 	
 	@Getter
 	@Setter
-	@Column
-	private Long chrono;
+	@Column(name = "CONTENU")
+	private String contenu;
 	
 	@Getter
 	@Setter
-	@Column
-	private String libelle;
-	
-	@Getter
-	@Setter
-	@Column
+	@Column(name = "ID_RECETTE")
 	private Long idRecette;
 }

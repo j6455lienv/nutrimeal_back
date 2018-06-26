@@ -45,7 +45,7 @@ public class RecetteIngredient implements Serializable{
 	
 	@Getter
 	@Setter
-	@Column
+	@Column(name = "QUANTITE")
 	private Double quantite;
 
 	@Getter

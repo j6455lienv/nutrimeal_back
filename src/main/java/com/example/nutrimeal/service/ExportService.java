@@ -1,5 +1,6 @@
 package com.example.nutrimeal.service;
 
+
 import java.io.OutputStream;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class ExportService {
 	MethodesPratiquesRepository methodesPratiquesRepository;
 	@Autowired
 	BilanService bilanService;
+	@Autowired
+	RecetteService recetteService;
 	
 	/**
 	 * Export PDF du bilan de la semaine
@@ -53,7 +56,7 @@ public class ExportService {
 		
 		
 		for (Recette recette : listeRecettes) {
-		
+			recette = recetteService.getRecetteById(recette.getIdRecette());
 			totalVitamines += bilanService.calculVitaminesPourRecette(recette);
 			totalMineraux += bilanService.calculMinerauxPourRecette(recette);
 			
@@ -80,11 +83,11 @@ public class ExportService {
 		    
 			for(RecetteIngredient ingredient : recette.getRecetteIngredients()) {
 			
-				Double vitaminesParIngredient = ingredient.getIngredients().getVitamines();
-				Double minerauxParIngredient = ingredient.getIngredients().getMineraux();
+				Double vitaminesParIngredient = ingredient.getIngredients().getVitamines()*ingredient.getQuantite()/1000;;
+				Double minerauxParIngredient = ingredient.getIngredients().getMineraux()*ingredient.getQuantite()/1000;;
 				
-				totalVitaminesRecette += vitaminesParIngredient*ingredient.getQuantite()/1000;
-				totalMinerauxRecette += minerauxParIngredient*ingredient.getQuantite()/1000;
+				totalVitaminesRecette += vitaminesParIngredient;
+				totalMinerauxRecette += minerauxParIngredient;
 				
 				table.addCell(ingredient.getIngredients().getLibelle());
 				
@@ -112,15 +115,15 @@ public class ExportService {
 			
 			document.add(table);
 		}
-		
-		
-		
+				
 		document.add(new Paragraph("Le bilan en vitamines est de " + methodesPratiquesRepository.
 				deuxChiffresSignificatifs(totalVitamines/1000) + " g " ));	
 		document.add(new Paragraph("Le bilan en mineraux est de " + methodesPratiquesRepository.
 				deuxChiffresSignificatifs(totalMineraux/1000) + " g "));
-		
 		document.close();
 	}
+	
+	
+	
 	
 }

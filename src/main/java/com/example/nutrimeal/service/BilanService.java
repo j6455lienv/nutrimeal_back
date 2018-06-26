@@ -100,7 +100,7 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 		
 		for(Recette recette : listeRecettes) {
 			
-			recette = recetteService.getRecetteById(recette.idRecette);
+			recette = recetteService.getRecetteById(recette.getIdRecette());
 			Double bilanVitaminiqueParRecette = calculVitaminesPourRecette(recette);
 			Double bilanMineralParRecette = calculMinerauxPourRecette(recette);
 			
