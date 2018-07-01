@@ -23,6 +23,8 @@ public class RecetteService {
 	
 	/** Nombre de recettes aléatoirement tirées de la base pour le carroussel.*/
 	private static final int CARROUSSEL_RECETTE_NUMBER = 10;
+	
+	private static final int CARROUSSEL_ELEMENT_PAR_PAGE = 10;
 
 	/** Récupère une recette persistée à partir de son id.
 	 * @param id l'id de la recette
@@ -68,7 +70,6 @@ public class RecetteService {
 				i++;
 			}
 		}
-
 		return result;
 	}
 }
