@@ -42,30 +42,31 @@ public class RecetteService {
 	/**  Récupère aléatoirement des recettes avec images en base pour le carroussel de la page d'accueil.
 	 * @return la liste des recettes pris aléatoirement en base*/
 	public Set<Recette> findRandomRecettesWithImages() {
+		int elementsPerPage = 20;
 		Set<Recette> result = new HashSet<>();
+
+		Page<Recette> recetteListe = recetteRepository.findByBase64ImageCodeNotNull(PageRequest.of(0, elementsPerPage));
 		
-		Pageable pageable = new PageRequest(1,20);
-		Page<Recette> recetteListe = recetteRepository.findByBase64ImageCodeNotNull(pageable);
-		int elementPerPage = recetteListe.getNumberOfElements();
-		int totalNumberOfElements = (int) recetteListe.getTotalElements();
-		
-		int randomIndex;
-		int askedPage;
-		int elementIndexInPage;
-		List<Recette> pageContent;
-		
-		int i = 0;
-		
-		while (i < CARROUSSEL_RECETTE_NUMBER) {
-			randomIndex = (int) Math.round(Math.random() * totalNumberOfElements);
-			askedPage = (int) Math.ceil(randomIndex / elementPerPage);
-			recetteListe = recetteRepository.findByBase64ImageCodeNotNull(new PageRequest(askedPage, elementPerPage));
+		if (recetteListe.hasContent()) {
+			long totalElementsNumber = recetteListe.getTotalElements();
+			int i = 0;
+			int randomRecetteIndex;
+			int askedPage;
+			int elementIndexInPage;
+			List<Recette> pageContent;
 			
-			pageContent = recetteListe.getContent();
-			elementIndexInPage = randomIndex % elementPerPage;
-			
-			result.add(pageContent.get(elementIndexInPage));
-			i++;
+			while (i < CARROUSSEL_RECETTE_NUMBER) {
+				randomRecetteIndex = (int) (Math.floor(Math.random() * totalElementsNumber));
+				askedPage = (int) (Math.floor(randomRecetteIndex / elementsPerPage));
+				
+				recetteListe = recetteRepository.findByBase64ImageCodeNotNull(PageRequest.of(askedPage, elementsPerPage));
+				
+				pageContent = recetteListe.getContent();
+				elementIndexInPage = randomRecetteIndex % elementsPerPage;
+				
+				result.add(pageContent.get(elementIndexInPage));
+				i++;
+			}
 		}
 
 		return result;
