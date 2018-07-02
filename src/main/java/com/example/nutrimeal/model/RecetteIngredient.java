@@ -9,6 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.Formula;
+import org.springframework.lang.Nullable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,41 +22,34 @@ import lombok.Setter;
 
 @IdClass(value = RecetteIngredient.class)
 @Entity(name = "RECETTE_INGREDIENT")
+@Getter
+@Setter
 public class RecetteIngredient implements Serializable{
-
-
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Getter
-	@Setter
 	@Id
 	@Column(name = "ID_RECETTE")
 	private Long idRecette;
-	
-	@Getter
-	@Setter
+
 	@Id
 	@Column(name = "ID_INGREDIENT")
 	private Long idIngredient;
-	
-	@Getter
-	@Setter
+
 	@ManyToOne
     @JoinColumn(name="ID_RECETTE", nullable=false, insertable= false, updatable=false)
+	@JsonIgnore
     public Recette recette;
 	
-	@Getter
-	@Setter
 	@Column(name = "QUANTITE")
 	private Double quantite;
 
-	@Getter
-	@Setter
+
 	@ManyToOne
     @JoinColumn(name="ID_INGREDIENT", nullable=false, insertable= false, updatable=false)
+	@JsonIgnore
     public Ingredient ingredients;
 }

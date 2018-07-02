@@ -52,8 +52,6 @@ public class BilanController {
 	
 	/** Méthode du RestController qui envoie un tableau de nom recettes et d'ID_RECETTE au front.
 	 *
-	 * @param 
-	 * 		néant
 	 * @return
 	 * 		Retourne une liste de Paires clés / valeurs NOM_RECETTE / ID_RECETTE pour les listes de recherche
 	 * @throws Exception

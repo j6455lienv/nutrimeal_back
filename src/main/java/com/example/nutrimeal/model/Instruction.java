@@ -10,22 +10,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Instruction {
 
-	@Getter
-	@Setter
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_INSTRUCTION")
-    private Long idInstruction;
+	@Column(name = "id_instruction")
+    private Long id;
 	
-	@Getter
-	@Setter
-	@Column(name = "CONTENU")
-	private String contenu;
+	@Column
+	private Long chrono;
 	
-	@Getter
-	@Setter
-	@Column(name = "ID_RECETTE")
-	private Long idRecette;
+	@Column
+	private String libelle;
+	
+	@Column(name = "id_recette")
+	private Long recetteId;
 }

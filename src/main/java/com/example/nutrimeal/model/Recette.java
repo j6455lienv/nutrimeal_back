@@ -9,42 +9,38 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Entity(name = "RECETTE")
+@Getter
+@Setter
 public class Recette {
 
-	@Getter
-	@Setter
 	@Id 
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_RECETTE")
     private Long idRecette;	
 
-	@Getter
-	@Setter
-    @OneToMany(mappedBy="recette")
+    @OneToMany(mappedBy="idRecette")
     private Set<RecetteIngredient> recetteIngredients = new HashSet<>();
 
-	@Getter
-	@Setter
 	@Column(name = "NOM_RECETTE")
 	private String nomRecette;
 	
-	@Getter
-	@Setter
 	@Column(name = "TEMPS_PREPARATION")
 	private Integer tempsPreparation;
 	
-	@Getter
-	@Setter
+	@Transient
 	private Double minerauxParPortion;
 	
-	@Getter
-	@Setter
+	@Transient
 	private Double vitaminesParPortion;
+	
+	@Column(name = "image_recette")
+	private String base64ImageCode;
 	
 }
