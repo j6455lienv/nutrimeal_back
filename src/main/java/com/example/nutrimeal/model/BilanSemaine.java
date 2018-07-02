@@ -1,6 +1,6 @@
 package com.example.nutrimeal.model;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ public class BilanSemaine {
 
 	@Getter
 	@Setter
-	private List<Recette> listeRecettes;
+	private Set<Recette> listeRecettes;
 	
 	@Getter
 	@Setter

@@ -22,12 +22,12 @@ public class Recette {
 	@Id 
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_RECETTE")
-    public Long idRecette;	
+    private Long idRecette;	
 
 	@Getter
 	@Setter
     @OneToMany(mappedBy="recette")
-    public Set<RecetteIngredient> recetteIngredients = new HashSet<>();
+    private Set<RecetteIngredient> recetteIngredients = new HashSet<>();
 
 	@Getter
 	@Setter

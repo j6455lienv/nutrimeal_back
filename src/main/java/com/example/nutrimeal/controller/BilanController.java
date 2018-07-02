@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nutrimeal.model.BilanSemaine;
+import com.example.nutrimeal.model.Paire;
 import com.example.nutrimeal.model.Recette;
-import com.example.nutrimeal.repository.MethodesPratiquesRepository;
 import com.example.nutrimeal.service.BilanService;
+import com.example.nutrimeal.service.RecetteService;
 
 /**
  * 
@@ -24,19 +25,17 @@ import com.example.nutrimeal.service.BilanService;
 public class BilanController {
 
 	@Autowired
-	MethodesPratiquesRepository methodes;
-	
+	RecetteService recetteService;
 	@Autowired
 	BilanService bilanService;
 	
-	/**
-	 * Méthode du restController qui export en PDF les recettes sélectionnées dans l'onglet Bilan
-	 * 
-	 * @param listeIdAsString
-	 * 			Liste d'ID sous forme de chaine de caractères (ex : "12,13,42")
+	/** Méthode du RestController qui calcule le bilan pour les recettes sélectionnées par l'utilisateur
+	 *
+	 * @param listeRecettes
+	 * 			Liste des recettes au format JSON
 	 * @return
-	 * 			Export pdf du bilan de la semaine
-	 * @throws Exception 
+	 * 			Retourne le bilan : Recettes au format sans mapping et bilan minéral / vitaminal
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "/bilan", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<?> getListeRecettes(@RequestBody List<Recette> listeRecettes) throws Exception{	
@@ -50,5 +49,30 @@ public class BilanController {
 			return new ResponseEntity<>(bilan, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	/** Méthode du RestController qui envoie un tableau de nom recettes et d'ID_RECETTE au front.
+	 *
+	 * @param 
+	 * 		néant
+	 * @return
+	 * 		Retourne une liste de Paires clés / valeurs NOM_RECETTE / ID_RECETTE pour les listes de recherche
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/bilan", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getNomRecettesEtIdRecette() throws Exception{	
+		
+		List<Paire> listePaires = recetteService.alimentationListesRecettes();
+		 
+		if (listePaires != null) {
+			return new ResponseEntity<>(listePaires, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<>(listePaires, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	
+	
 	
 }
