@@ -55,9 +55,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.0.6</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.16</version>
+			<version>1.16.20</version><!--$NO-MVN-MAN-VER$-->
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -70,6 +75,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>

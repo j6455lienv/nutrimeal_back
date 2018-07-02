@@ -1,7 +1,12 @@
 package com.example.nutrimeal.service;
 
+
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,19 +17,84 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.example.nutrimeal.model.Paire;
 import com.example.nutrimeal.model.Recette;
+import com.example.nutrimeal.repository.MethodesPratiquesRepository;
 import com.example.nutrimeal.repository.RecetteRepository;
 
+
+/**
+ * 
+ * @author Gaetan Inidjel
+ *
+ */
 @Service
 public class RecetteService {
 	
-	@Autowired
-	private RecetteRepository recetteRepository;
-	
 	/** Nombre de recettes aléatoirement tirées de la base pour le carroussel.*/
 	private static final int CARROUSSEL_RECETTE_NUMBER = 10;
+
+	/**
+	 * Nom de la BDD
+	 */
+	public final static String database = "jdbc:h2:mem:test";
 	
-	private static final int CARROUSSEL_ELEMENT_PAR_PAGE = 10;
+	/**
+	 * User
+	 */
+	public final static String userName = "sa";
+	
+	/**
+	 * mdp
+	 */
+	public final static String password = "";
+	
+	/**
+	 * Requête SQL pour alimentation des listes
+	 */
+	public final static String listesFront = "select ID_RECETTE, NOM_RECETTE from RECETTE";
+	
+	@Autowired
+	MethodesPratiquesRepository methodesPratiquesRepository;
+	@Autowired 
+	private RecetteRepository recetteRepository;
+		
+	/**
+	 * Méthode qui retourne une recette lorsque l'on donne une idRecette
+	 * 
+	 * @param id
+	 * 			id de la recette à récupérer
+	 * @return
+	 * 			Un objet Recette
+	 */
+	public Recette getRecetteById (Long id){
+		return recetteRepository.getOne(id);
+	}
+	
+	/**
+	 * Méthode qui extrait la liste des recettes au format clé / valeur
+	 * 
+	 * @return
+	 * 		Liste<Paire> utilisée pour alimenter les listes de recettes
+	 * @throws SQLException
+	 */
+    public List<Paire> alimentationListesRecettes() throws SQLException{
+	
+    // Connection à la database et requête sur NOM_RECETTE et ID_RECETTE
+    Statement stmt = null;
+	stmt = DriverManager.getConnection(database, userName, password).createStatement();
+	ResultSet rs =  stmt.executeQuery(listesFront);
+		
+	List<Paire> listePaireIdRecetteNomRecette = new ArrayList<>();
+		while(rs.next()) {
+			String value = rs.getString("NOM_RECETTE");
+			Long key = rs.getLong("ID_RECETTE");
+			
+		listePaireIdRecetteNomRecette.add(methodesPratiquesRepository.creationPaireKeyValue(key, value));
+		}
+	return listePaireIdRecetteNomRecette;
+	
+    }
 
 	/** Récupère une recette persistée à partir de son id.
 	 * @param id l'id de la recette
@@ -38,7 +108,7 @@ public class RecetteService {
 	 * @param pageable les paramètres de pagination
 	 * @return la liste des recettes correspondant à la recherche*/
 	public Page<Recette> findRecetteContaining(String string, Pageable pageable) {
-		return recetteRepository.findByNomContainsIgnoreCaseOrderByNom(pageable, string);
+		return recetteRepository.findByNomRecetteContainsIgnoreCaseOrderByNomRecette(pageable, string);
 	}
 
 	/**  Récupère aléatoirement des recettes avec images en base pour le carroussel de la page d'accueil.
