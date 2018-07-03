@@ -5,9 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.nutrimeal.model.Paire;
 import com.example.nutrimeal.model.Recette;
 import com.example.nutrimeal.repository.MethodesPratiquesRepository;
 import com.example.nutrimeal.repository.RecetteRepository;
@@ -78,19 +78,19 @@ public class RecetteService {
 	 * 		Liste<Paire> utilisée pour alimenter les listes de recettes
 	 * @throws SQLException
 	 */
-    public List<Paire> alimentationListesRecettes() throws SQLException{
+    public Map<Long, String> alimentationListesRecettes() throws SQLException{
 	
     // Connection à la database et requête sur NOM_RECETTE et ID_RECETTE
     Statement stmt = null;
 	stmt = DriverManager.getConnection(database, userName, password).createStatement();
 	ResultSet rs =  stmt.executeQuery(listesFront);
 		
-	List<Paire> listePaireIdRecetteNomRecette = new ArrayList<>();
+	Map<Long, String> listePaireIdRecetteNomRecette = new HashMap<>();
 		while(rs.next()) {
 			String value = rs.getString("NOM_RECETTE");
 			Long key = rs.getLong("ID_RECETTE");
 			
-		listePaireIdRecetteNomRecette.add(methodesPratiquesRepository.creationPaireKeyValue(key, value));
+		listePaireIdRecetteNomRecette.put(key, value);
 		}
 	return listePaireIdRecetteNomRecette;
 	

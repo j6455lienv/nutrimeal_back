@@ -1,6 +1,7 @@
 package com.example.nutrimeal.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nutrimeal.model.BilanSemaine;
-import com.example.nutrimeal.model.Paire;
 import com.example.nutrimeal.model.Recette;
 import com.example.nutrimeal.service.BilanService;
 import com.example.nutrimeal.service.RecetteService;
@@ -59,7 +59,7 @@ public class BilanController {
 	@RequestMapping(value = "/bilan", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<?> getNomRecettesEtIdRecette() throws Exception{	
 		
-		List<Paire> listePaires = recetteService.alimentationListesRecettes();
+		Map<Long, String> listePaires = recetteService.alimentationListesRecettes();
 		 
 		if (listePaires != null) {
 			return new ResponseEntity<>(listePaires, HttpStatus.OK);
