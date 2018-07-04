@@ -68,9 +68,4 @@ public class BilanController {
 			return new ResponseEntity<>(listePaires, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
-	
-	
-	
 }
