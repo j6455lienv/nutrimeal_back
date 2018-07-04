@@ -29,7 +29,7 @@ public class Recette {
 
     @OneToMany(mappedBy="idRecette")
     private Set<RecetteIngredient> recetteIngredients = new HashSet<>();
-
+   
 	@Column(name = "NOM_RECETTE")
 	private String nomRecette;
 	

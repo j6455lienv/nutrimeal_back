@@ -161,7 +161,7 @@ public class ExportService {
 			
 		for (RecetteIngredient ri : recette.getRecetteIngredients()) {
 			
-			String unite = ri.getIngredients().getUniteMesure();
+			String unite = ri.getIngredients().getUniteMesure().getLabel();
 			Double quantité = methodesPratiquesRepository.deuxChiffresSignificatifs(nb * ri.getQuantite());
 			document.add(new Paragraph(ri.getIngredients().getLibelle() + " : " + quantité.toString() + " " + unite + " "));
 			

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.nutrimeal.model.Recette;
+import com.example.nutrimeal.model.RecetteIngredient;
 import com.example.nutrimeal.repository.MethodesPratiquesRepository;
 import com.example.nutrimeal.repository.RecetteRepository;
 
@@ -141,5 +142,22 @@ public class RecetteService {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Permet de calculer les apports en vitamines et en minéraux d'une recette.
+	 * @param recette la recette dont on veut calculer les apports
+	 * @return la recette mise à jour avec ses apports
+	 */
+	public Recette computeValues(Recette recette) {
+		double vitamines = 0d;
+		double mineraux = 0d;
+		for (RecetteIngredient re : recette.getRecetteIngredients()) {
+			vitamines += (re.getIngredients().getVitamines() * re.getQuantite());
+			mineraux += (re.getIngredients().getMineraux() * re.getQuantite());
+		}
+		recette.setMinerauxParPortion(mineraux);
+		recette.setVitaminesParPortion(vitamines);
+		return recette;
 	}
 }
