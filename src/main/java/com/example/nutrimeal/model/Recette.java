@@ -1,6 +1,7 @@
 package com.example.nutrimeal.model;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
 import lombok.Getter;
@@ -41,6 +43,10 @@ public class Recette {
 	private Double vitaminesParPortion;
 	
 	@Column(name = "image_recette")
-	private String base64ImageCode;
+	private String base64ImageCode;	
+	
+	@OneToMany(mappedBy="recetteId")
+    @OrderBy(value = "chrono")
+    private Set<Instruction> instructions = new LinkedHashSet<>();
 	
 }

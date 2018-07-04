@@ -25,6 +25,6 @@ public class Instruction {
 	@Column
 	private String libelle;
 	
-	@Column(name = "id_recette")
+	@Column(name = "ID_RECETTE")
 	private Long recetteId;
 }

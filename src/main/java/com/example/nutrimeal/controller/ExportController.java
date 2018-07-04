@@ -1,13 +1,16 @@
 package com.example.nutrimeal.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.nutrimeal.model.Recette;
@@ -20,7 +23,7 @@ import com.example.nutrimeal.service.ExportService;
 public class ExportController {
 
     @Autowired
-    ExportService exportBilanPdfService;
+    ExportService exportService;
 
     /**
      * Méthode qui exporte en pdf la liste des recettes, minéraux, vitamines et ingredients
@@ -35,8 +38,21 @@ public class ExportController {
                                HttpServletResponse response) throws Exception {
         response.setContentType("application/pdf; charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=BilanSemaine.pdf");
-        exportBilanPdfService.exportBilanPdfService(response.getOutputStream(), listeRecettes);
+        exportService.exportBilanPdf(response.getOutputStream(), listeRecettes);
     }
+    
+	/** Exporte en pdf la recette persistée demandée par une requête.
+	 * @param id l'id de la recette
+	 * @return Un document pdf avec la recette serialisée
+	 * @throws Exception 
+	 * @throws IOException */
+	@RequestMapping(value = "/recette/{id}/nbPersonnes/{nb}/pdf", method = RequestMethod.GET)
+	public void exportPdfThisRecette(@PathVariable("id") Long id, @PathVariable("nb") Integer nb, HttpServletRequest request,
+            HttpServletResponse response) throws IOException, Exception {
+		response.setContentType("application/pdf; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=Recette.pdf");
+        exportService.exportRecettePdf(response.getOutputStream(), id, nb);
+	}
 
 
 }
