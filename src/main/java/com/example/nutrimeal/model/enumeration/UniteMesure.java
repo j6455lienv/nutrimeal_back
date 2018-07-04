@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.assertj.core.util.Arrays;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.util.EnumValues;
 
 import lombok.AllArgsConstructor;
@@ -17,8 +18,11 @@ import lombok.Setter;
 
 @Getter
 public enum UniteMesure {
+	@JsonProperty("unité")
 	UNITE("unite"),
+	@JsonProperty("g")
 	GRAMME("g"),
+	@JsonProperty("cl")
 	CENTILITRE("cl");
 	
 	private UniteMesure(String s) {
