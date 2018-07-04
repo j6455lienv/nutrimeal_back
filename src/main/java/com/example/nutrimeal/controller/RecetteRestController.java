@@ -45,7 +45,9 @@ public class RecetteRestController {
 	public ResponseEntity<Recette> findThisRecette(@PathVariable("id") Long id ) {
 		Optional<Recette> recette = recetteService.get(id);
 		if (recette.isPresent()) {
-			return new ResponseEntity<>(recette.get(), HttpStatus.OK);
+			Recette foundRecette = recette.get();
+			foundRecette = recetteService.computeValues(foundRecette);
+			return new ResponseEntity<>(foundRecette, HttpStatus.OK);
 		}
 		else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
