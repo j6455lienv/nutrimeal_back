@@ -63,8 +63,8 @@ public class ExportService {
 			totalMineraux += bilanService.calculMinerauxPourRecette(recette);
 			
 			
-			Font f=new Font(FontFamily.HELVETICA,30.0f,Font.UNDERLINE,BaseColor.BLACK);
-			Paragraph paragraph1 = new Paragraph("Détail de la recette : " + recette.getNomRecette() + " pour " + 
+			Font f=new Font(FontFamily.HELVETICA,25.0f,Font.UNDERLINE,BaseColor.BLACK);
+			Paragraph paragraph1 = new Paragraph(recette.getNomRecette() + " pour " + 
 			nb + " personnes.",f);
 			paragraph1.setSpacingAfter(30f);
 			
@@ -106,12 +106,12 @@ public class ExportService {
 				
 				table.addCell(ingredient.getIngredients().getLibelle());
 				
-				if(UNITE.equals(ingredient.getIngredients().getUniteMesure())) {
+				if(UNITE.equals(ingredient.getIngredients().getUniteMesure().getLabel())) {
 					table.addCell(ingredient.getQuantite().toString());
 				}else {
 					
 					table.addCell(ingredient.getQuantite().toString()
-							+ " " + ingredient.getIngredients().getUniteMesure());
+							+ " " + ingredient.getIngredients().getUniteMesure().getLabel());
 				}
 				
 				table.addCell(vitaminesParIngredient.toString() + " mg ");
@@ -131,12 +131,14 @@ public class ExportService {
 			
 			document.add(table);
 		
-					
+			// Bilan
 			document.add(new Paragraph("Le bilan en vitamines est de " + methodesPratiquesRepository.
 					deuxChiffresSignificatifs(totalVitamines/1000) + " g " ));	
 			document.add(new Paragraph("Le bilan en mineraux est de " + methodesPratiquesRepository.
 					deuxChiffresSignificatifs(totalMineraux/1000) + " g "));
 			
+			
+			// Instructions
 			f=new Font(FontFamily.HELVETICA,20.0f,Font.NORMAL,BaseColor.BLACK);
 			paragraph1 = new Paragraph("Instructions : ",f);
 			paragraph1.setSpacingAfter(20f);
@@ -144,15 +146,13 @@ public class ExportService {
 			
 			Set<Instruction> setInstructions = recette.getInstructions();
 			
-			f=new Font(FontFamily.HELVETICA,20.0f,Font.NORMAL,BaseColor.BLACK);
-			
 			Integer i = 1;
 			for (Instruction instru : setInstructions) {
-				document.add(new Paragraph( i + ". " + instru.getLibelle(),f));
+				document.add(new Paragraph( i + ". " + instru.getLibelle()));
 				i++;
 			}
 			
-			
+		// Liste des ingrédients
 			paragraph1 = new Paragraph("Ingrédients : ",f);
 			paragraph1.setSpacingAfter(20f);
 			paragraph1.setSpacingBefore(20f);
