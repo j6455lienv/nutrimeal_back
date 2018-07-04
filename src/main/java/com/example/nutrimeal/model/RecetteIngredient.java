@@ -47,9 +47,7 @@ public class RecetteIngredient implements Serializable{
 	@Column(name = "QUANTITE")
 	private Double quantite;
 
-
 	@ManyToOne
     @JoinColumn(name="ID_INGREDIENT", nullable=false, insertable= false, updatable=false)
-	@JsonIgnore
     public Ingredient ingredients;
 }
