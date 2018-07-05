@@ -2,6 +2,8 @@ package com.example.nutrimeal.model;
 
 import java.util.Set;
 
+import javax.persistence.Transient;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +13,19 @@ public class BilanSemaine {
 
 	private Set<Recette> listeRecettes;
 
-	private Double bilanMineral;
+	@Transient
+	private Double bilanfer;
 	
-
-	private Double bilanVitaminal;
+	@Transient
+	private Double bilanSodium;
+	
+	@Transient
+	private Double bilanVitamineD;
+	
+	@Transient
+	private Double bilanVitamineC;
+	
+	@Transient
+	private Double bilanVitamineB12;
 	
 }

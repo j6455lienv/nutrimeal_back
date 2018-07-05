@@ -37,10 +37,19 @@ public class Recette {
 	private Integer tempsPreparation;
 	
 	@Transient
-	private Double minerauxParPortion;
+	private Double ferParPortion;
 	
 	@Transient
-	private Double vitaminesParPortion;
+	private Double sodiumParPortion;
+	
+	@Transient
+	private Double vitamineDParPortion;
+	
+	@Transient
+	private Double vitamineCParPortion;
+	
+	@Transient
+	private Double vitamineB12ParPortion;
 	
 	@Column(name = "image_recette")
 	private String base64ImageCode;	

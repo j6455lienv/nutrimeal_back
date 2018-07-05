@@ -41,8 +41,17 @@ public class Ingredient {
 	private UniteMesure uniteMesure;
 	
 	@Column
-	private Double vitamines;
+	private Double vitamineC;
 	
 	@Column
-	private Double mineraux;
+	private Double vitamineD;
+	
+	@Column
+	private Double vitamineB12;
+	
+	@Column
+	private Double fer;
+	
+	@Column
+	private Double sodium;
 }
