@@ -204,7 +204,6 @@ public class RecetteService {
 			apports.add(vitamineC);
 			apports.add(vitamineD);
 			apports.add(vitamineB12);
-			
 		return apports;
 	}
 	

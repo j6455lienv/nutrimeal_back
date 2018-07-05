@@ -23,11 +23,11 @@ public class RecetteIngredientService {
 		
 		List<Double> listeNutriments = new ArrayList<Double>(5);
 		
-		listeNutriments.add(recetteIngredient.getIngredients().getSodium());
-		listeNutriments.add(recetteIngredient.getIngredients().getFer());
-		listeNutriments.add(recetteIngredient.getIngredients().getVitamineC());
-		listeNutriments.add(recetteIngredient.getIngredients().getVitamineD());
-		listeNutriments.add(recetteIngredient.getIngredients().getVitamineB12());
+		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getSodium());
+		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getFer());
+		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getVitamineC());
+		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getVitamineD());
+		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getVitamineB12());
 		
 		return listeNutriments;
 	}
