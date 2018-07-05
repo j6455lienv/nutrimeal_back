@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -150,14 +151,61 @@ public class RecetteService {
 	 * @return la recette mise à jour avec ses apports
 	 */
 	public Recette computeValues(Recette recette) {
-		double vitamines = 0d;
-		double mineraux = 0d;
+		double vitamineC = 0d;
+		double vitamineD = 0d;
+		double vitamineB12 = 0d;
+		double fer = 0d;
+		double sodium = 0d;
 		for (RecetteIngredient re : recette.getRecetteIngredients()) {
-			vitamines += (re.getIngredients().getVitamines() * re.getQuantite());
-			mineraux += (re.getIngredients().getMineraux() * re.getQuantite());
+			vitamineC += (re.getIngredients().getVitamineC() * re.getQuantite());
+			vitamineD += (re.getIngredients().getVitamineD() * re.getQuantite());
+			vitamineB12 += (re.getIngredients().getVitamineB12() * re.getQuantite());
+			fer += (re.getIngredients().getFer() * re.getQuantite());
+			sodium += (re.getIngredients().getSodium() * re.getQuantite());
 		}
-		recette.setMinerauxParPortion(mineraux);
-		recette.setVitaminesParPortion(vitamines);
+		recette.setFerParPortion(fer);
+		recette.setSodiumParPortion(sodium);
+		recette.setVitamineCParPortion(vitamineC);
+		recette.setVitamineDParPortion(vitamineD);
+		recette.setVitamineB12ParPortion(vitamineB12);
+		
 		return recette;
 	}
+	
+	/**
+	 * La méthode renvoie 
+	 * 
+	 * @param Recette
+	 * 		Un objet Recette
+	 * @return vitaminesTotales
+	 * 		Retourne le total en nutriments de la recette (List<Double> dans l'ordre So, Fe, VC,, VD, VB12)
+	 * @throws Exception 
+	 */
+	public List<Double> calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(Recette recette) throws Exception {
+		
+		Double sodium = 0d;
+		Double fer = 0d;
+		Double vitamineC = 0d;
+		Double vitamineD = 0d;
+		Double vitamineB12 = 0d;
+		// Les ingrédients sont récupérés
+			Set<RecetteIngredient> ingredients = recette.getRecetteIngredients();
+			List<Double> apports = new ArrayList<>();
+			// Pour chaque ingrédient, la quantité est multipliée par les vitamines par ingrédient.
+			for(RecetteIngredient ingredient : ingredients) {
+				sodium += ingredient.getQuantite()*ingredient.getIngredients().getSodium();
+				fer += ingredient.getQuantite()*ingredient.getIngredients().getFer();
+				vitamineC += ingredient.getQuantite()*ingredient.getIngredients().getVitamineC();
+				vitamineD += ingredient.getQuantite()*ingredient.getIngredients().getVitamineD();
+				vitamineB12 += ingredient.getQuantite()*ingredient.getIngredients().getVitamineB12();
+			}
+			apports.add(sodium);
+			apports.add(fer);
+			apports.add(vitamineC);
+			apports.add(vitamineD);
+			apports.add(vitamineB12);
+			
+		return apports;
+	}
+	
 }

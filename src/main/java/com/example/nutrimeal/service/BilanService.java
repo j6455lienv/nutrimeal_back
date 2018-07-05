@@ -26,55 +26,6 @@ public class BilanService {
 	@Autowired
 	MethodesPratiquesRepository methodes;
 	
-	/**
-	 * La méthode qui somme les vitamines des ingrédients de la recette
-	 * 
-	 * @param Recette
-	 * 		Un objet Recette
-	 * @return vitaminesTotales
-	 * 		Retourne le bilan en minéraux de la recette (Double)
-	 * @throws Exception 
-	 */
-	public Double calculVitaminesPourRecette(Recette recette) throws Exception {
-	
-	Double vitaminesTotales = 0d;
-	
-	//Pour chaque idRecette
-		
-		// Les ingrédients sont récupérés
-		Set<RecetteIngredient> ingredients = recette.getRecetteIngredients();
-		
-		// Pour chaque ingrédient, la quantité est multipliée par les vitamines par ingrédient.
-		for(RecetteIngredient ingredient : ingredients) {
-			vitaminesTotales += ingredient.getQuantite()*ingredient.getIngredients().getVitamines();
-		}
-		return vitaminesTotales;
-	}
-/**
- * Méthode qui somme les minéraux des ingrédients de la recette
- * 
- * @param Recette
- * 			Un objet Recette
- * @return minerauxTotaux
- * 			Retourne le bilan en minéraux de la recette (Double)
- * @throws Exception 
- */
-	public Double calculMinerauxPourRecette(Recette recette) throws Exception {
-		
-		Double minerauxTotaux = 0d;
-		
-		//Pour chaque idRecette
-	
-			// Les ingrédients sont récupérés
-			Set<RecetteIngredient> ingredients = recette.getRecetteIngredients();
-			
-			// Pour chaque ingrédient, la quantité est multipliée par les minéraux par ingrédient.
-			for(RecetteIngredient ingredient : ingredients) {
-				minerauxTotaux += ingredient.getQuantite()*ingredient.getIngredients().getMineraux();
-		}
-		return minerauxTotaux;
-	}
-	
 	
 /**
  * 	Méthode qui renvoie un JSON pour le calcul du bilan de la semaine
@@ -87,8 +38,11 @@ public class BilanService {
  */
 public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 				
-		Double bilanVitaminesTotales = 0d;
-		Double bilanMinerauxTotaux = 0d;
+		Double bilanVitamineCTotales = 0d;
+		Double bilanVitamineDTotales = 0d;
+		Double bilanVitamineB12Totales = 0d;
+		Double bilanFerTotal = 0d;
+		Double bilanSodiumTotal = 0d;
 				
 		// Création d'un Set sans mapping
 		Set<Recette> setRecetteSansMapping = new HashSet<Recette>();
@@ -97,26 +51,53 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 			
 			// Reconstruction du mapping et calcul des minéraux / Vitamines
 			recette = recetteService.getRecetteById(recette.getIdRecette());
-			Double bilanVitaminiqueParRecette = calculVitaminesPourRecette(recette);
-			Double bilanMineralParRecette = calculMinerauxPourRecette(recette);
+			
+			Double bilanVitamineCParRecette = 0d;
+			Double bilanVitamineDParRecette =  0d;
+			Double bilanVitamineB12ParRecette =  0d;
+			Double bilanFerParRecette =  0d;
+			Double bilanSodiumParRecette =  0d;
+			
+			
+			Set<RecetteIngredient> ingredients = recette.getRecetteIngredients();
+			
+			// Pour chaque ingrédient, la quantité est multipliée par les minéraux par ingrédient.
+			for(RecetteIngredient ingredient : ingredients) {
+				bilanFerParRecette += ingredient.getQuantite()*ingredient.getIngredients().getFer();
+				bilanSodiumParRecette += ingredient.getQuantite()*ingredient.getIngredients().getSodium();
+				bilanVitamineCParRecette += ingredient.getQuantite()*ingredient.getIngredients().getVitamineC();
+				bilanVitamineDParRecette += ingredient.getQuantite()*ingredient.getIngredients().getVitamineD();
+				bilanVitamineB12ParRecette += ingredient.getQuantite()*ingredient.getIngredients().getVitamineB12();
+			}
 			
 			// Créer un petit objet non mappé (plus léger pour le front)
 			Recette RecetteSansMapping = new Recette();
 			RecetteSansMapping.setNomRecette(recette.getNomRecette());
-			RecetteSansMapping.setMinerauxParPortion(bilanMineralParRecette);
-			RecetteSansMapping.setVitaminesParPortion(bilanVitaminiqueParRecette);
+			RecetteSansMapping.setFerParPortion(bilanFerParRecette);
+			RecetteSansMapping.setSodiumParPortion(bilanSodiumParRecette);
+			RecetteSansMapping.setVitamineCParPortion(bilanVitamineCParRecette);
+			RecetteSansMapping.setVitamineDParPortion(bilanVitamineDParRecette);
+			RecetteSansMapping.setVitamineB12ParPortion(bilanVitamineB12ParRecette);
+			
 			setRecetteSansMapping.add(RecetteSansMapping);
 			
 			// Calculer le total pour le bilan
-			bilanVitaminesTotales += bilanVitaminiqueParRecette;
-			bilanMinerauxTotaux += bilanMineralParRecette;
+			bilanVitamineCTotales += bilanVitamineCParRecette;
+			bilanVitamineDTotales += bilanVitamineDParRecette;
+			bilanVitamineB12Totales += bilanVitamineB12ParRecette;
+			bilanFerTotal += bilanFerParRecette;
+			bilanSodiumTotal += bilanSodiumParRecette;
+	
 		}
 		// Création du bilan de la semaine
 		BilanSemaine bilan = new BilanSemaine();
 		bilan.setListeRecettes(setRecetteSansMapping);
-		bilan.setBilanMineral(bilanMinerauxTotaux);
-		bilan.setBilanVitaminal(bilanVitaminesTotales);
-			
+		bilan.setBilanfer(bilanFerTotal);
+		bilan.setBilanSodium(bilanSodiumTotal);
+		bilan.setBilanVitamineC(bilanVitamineCTotales);
+		bilan.setBilanVitamineD(bilanVitamineDTotales);
+		bilan.setBilanVitamineB12(bilanVitamineB12Totales);
+		
 		return bilan;
 	}
 }

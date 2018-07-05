@@ -25,17 +25,17 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class ExportService {
-
-	private final String UNITE = "unite";
 	
 	@Autowired 
 	RecetteRepository recetteRepository;
 	@Autowired
-	MethodesPratiquesRepository methodesPratiquesRepository;
+	MethodesPratiquesRepository mpr;
 	@Autowired
 	BilanService bilanService;
 	@Autowired
 	RecetteService recetteService;
+	@Autowired
+	RecetteIngredientService recetteIngredientService;
 	
 	
 	/**
@@ -54,89 +54,72 @@ public class ExportService {
 				
 		document.open();
 
-		
-		Double totalVitamines = 0d;
-		Double totalMineraux = 0d;
-		
 			Recette recette = recetteService.getRecetteById(id);
-			totalVitamines += bilanService.calculVitaminesPourRecette(recette);
-			totalMineraux += bilanService.calculMinerauxPourRecette(recette);
 			
-			
-			Font f=new Font(FontFamily.HELVETICA,30.0f,Font.UNDERLINE,BaseColor.BLACK);
-			Paragraph paragraph1 = new Paragraph("Détail de la recette : " + recette.getNomRecette() + " pour " + 
-			nb + " personnes.",f);
+			// Nom de la recette
+			Font f=new Font(FontFamily.HELVETICA,25.0f,Font.UNDERLINE,BaseColor.BLACK);
+			Paragraph paragraph1 = new Paragraph(recette.getNomRecette(),f);
 			paragraph1.setSpacingAfter(30f);
-			
 		    document.add(paragraph1);
 		    
-		    
+		    // Création du tableau
 			PdfPCell cell;
-			PdfPTable table = new PdfPTable(4);
+			PdfPTable table = new PdfPTable(7);
 			
 			cell = new PdfPCell(new Phrase("Composition de la recette : " + recette.getNomRecette() + "(pour une portion)."));
-		    cell.setColspan(4);
+		    cell.setColspan(7);
 			cell.setHorizontalAlignment(1);
 			cell.setBackgroundColor(BaseColor.GREEN);
 		    table.addCell(cell);
 		    
-		    String[] entetes = {"Ingredients", "Quantite", "Vitamines", "Mineraux"};
+		    // Entêtes du tableau, seconde ligne
+		    String[] entetes = {"Ingredients", "Quantite", "Sodium", "Fer", "Vitamine C", "Vitamine D", "Vitamine B12"};
 		    
 		    for(String entete : entetes) {
 		    	cell = new PdfPCell(new Phrase(entete));
 		    	cell.setBackgroundColor(BaseColor.CYAN);
 			    table.addCell(cell);
 		    }
-		    
-		    Double totalVitaminesRecette = 0d;
-		    Double totalMinerauxRecette = 0d;
-		    
-			for(RecetteIngredient ingredient : recette.getRecetteIngredients()) {
-			
-				Double vitaminesParIngredient = methodesPratiquesRepository.deuxChiffresSignificatifs
-						(ingredient.getIngredients().getVitamines()
-						*ingredient.getQuantite()/1000);
+		   
+		    // Valeurs du tableau
+			for(RecetteIngredient recetteIngredient : recette.getRecetteIngredients()) {
+		
+				table.addCell(recetteIngredient.getIngredients().getLibelle());
 				
-				Double minerauxParIngredient = methodesPratiquesRepository.deuxChiffresSignificatifs
-						(ingredient.getIngredients().getMineraux()
-						*ingredient.getQuantite()/1000);
+				table.addCell(recetteIngredientService.quantiteIngredients(recetteIngredient));
 				
-				totalVitaminesRecette += vitaminesParIngredient;
-				totalMinerauxRecette += minerauxParIngredient;
+				// Calcul des nutriments par ingredient
+				List<Double> nutrimentsParIngredients = 
+						recetteIngredientService.nutrimentsParIngredients_So_Fe_VC_VD_VB12(recetteIngredient);
+				Double quantite = recetteIngredient.getQuantite();
 				
-				table.addCell(ingredient.getIngredients().getLibelle());
-				
-				if(UNITE.equals(ingredient.getIngredients().getUniteMesure())) {
-					table.addCell(ingredient.getQuantite().toString());
-				}else {
-					
-					table.addCell(ingredient.getQuantite().toString()
-							+ " " + ingredient.getIngredients().getUniteMesure());
-				}
-				
-				table.addCell(vitaminesParIngredient.toString() + " mg ");
-				table.addCell(minerauxParIngredient.toString() + " mg " );
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(0)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(1)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(2)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(3)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(4)/1000*quantite) + " g ");
 			}
 			
-			totalVitaminesRecette = methodesPratiquesRepository.
-					deuxChiffresSignificatifs(totalVitaminesRecette);
-			totalMinerauxRecette = methodesPratiquesRepository.
-					deuxChiffresSignificatifs(totalMinerauxRecette);
+			// Appel de la méthode de calcul de nutriments par recette
+			List<Double> apports = recetteService.calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
 
 			table.addCell("Total de la recette");
 			table.addCell("");
-			table.addCell(totalVitaminesRecette.toString() + " g ");
-			table.addCell(totalMinerauxRecette.toString() + " g ");
+			table.addCell(mpr.deuxChiffresSignificatifs(apports.get(0)/1000d)
+					.toString() + " g ");
+			table.addCell(mpr.deuxChiffresSignificatifs(apports.get(1)/1000d)
+					.toString() + " g ");
+			table.addCell(mpr.deuxChiffresSignificatifs(apports.get(2)/1000d)
+					.toString() + " g ");
+			table.addCell(mpr.deuxChiffresSignificatifs(apports.get(3)/1000d)
+					.toString() + " g ");
+			table.addCell(mpr.deuxChiffresSignificatifs(apports.get(4)/1000d)
+					.toString() + " g ");
 			table.setSpacingAfter(50);
 			
 			document.add(table);
-		
-					
-			document.add(new Paragraph("Le bilan en vitamines est de " + methodesPratiquesRepository.
-					deuxChiffresSignificatifs(totalVitamines/1000) + " g " ));	
-			document.add(new Paragraph("Le bilan en mineraux est de " + methodesPratiquesRepository.
-					deuxChiffresSignificatifs(totalMineraux/1000) + " g "));
 			
+			// Instructions
 			f=new Font(FontFamily.HELVETICA,20.0f,Font.NORMAL,BaseColor.BLACK);
 			paragraph1 = new Paragraph("Instructions : ",f);
 			paragraph1.setSpacingAfter(20f);
@@ -144,31 +127,24 @@ public class ExportService {
 			
 			Set<Instruction> setInstructions = recette.getInstructions();
 			
-			f=new Font(FontFamily.HELVETICA,20.0f,Font.NORMAL,BaseColor.BLACK);
-			
 			Integer i = 1;
 			for (Instruction instru : setInstructions) {
-				document.add(new Paragraph( i + ". " + instru.getLibelle(),f));
+				document.add(new Paragraph( i + ". " + instru.getLibelle()));
 				i++;
 			}
 			
-			
-			paragraph1 = new Paragraph("Ingrédients : ",f);
+			// Liste des ingrédients
+			paragraph1 = new Paragraph("Ingrédients pour " + nb + " personnes : ",f);
 			paragraph1.setSpacingAfter(20f);
 			paragraph1.setSpacingBefore(20f);
 			document.add(paragraph1);
 			
-			
-		for (RecetteIngredient ri : recette.getRecetteIngredients()) {
+			for (RecetteIngredient ri : recette.getRecetteIngredients()) {
 			
 			String unite = ri.getIngredients().getUniteMesure().getLabel();
-			Double quantité = methodesPratiquesRepository.deuxChiffresSignificatifs(nb * ri.getQuantite());
+			Double quantité = mpr.deuxChiffresSignificatifs(nb * ri.getQuantite());
 			document.add(new Paragraph(ri.getIngredients().getLibelle() + " : " + quantité.toString() + " " + unite + " "));
-			
-		}
-		
-		
-		
+			}
 		document.close();
 	}
 		
@@ -190,26 +166,36 @@ public class ExportService {
 				
 		document.open();
 
-		Double totalVitamines = 0d;
-		Double totalMineraux = 0d;
-		
+		Double totalVitamineC = 0d;
+		Double totalVitamineD = 0d;
+		Double totalVitamineB12 = 0d;
+		Double totalFer = 0d;
+		Double totalSodium = 0d;
 		
 		for (Recette recette : listeRecettes) {
 			recette = recetteService.getRecetteById(recette.getIdRecette());
-			totalVitamines += bilanService.calculVitaminesPourRecette(recette);
-			totalMineraux += bilanService.calculMinerauxPourRecette(recette);
 			
+			// Liste des apports
+			List<Double> apports = recetteService.calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
+			
+			totalSodium += apports.get(0);
+			totalFer += apports.get(1);
+			totalVitamineC += apports.get(2);
+			totalVitamineD += apports.get(3);
+			totalVitamineB12 += apports.get(4);
+			
+			// Création du tableau
 			PdfPCell cell;
-			PdfPTable table = new PdfPTable(4);
-			
+			PdfPTable table = new PdfPTable(7);
 			
 			cell = new PdfPCell(new Phrase("Composition de la recette : " + recette.getNomRecette()));
-		    cell.setColspan(4);
+		    cell.setColspan(7);
 			cell.setHorizontalAlignment(1);
 			cell.setBackgroundColor(BaseColor.GREEN);
 		    table.addCell(cell);
 		    
-		    String[] entetes = {"Ingredients", "Quantite", "Vitamines", "Mineraux"};
+		    // Création d'entête
+		    String[] entetes = {"Ingredients", "Quantite", "Sodium", "Fer", "Vitamine C", "Vitamine D", "Vitamine B12"};
 		    
 		    for(String entete : entetes) {
 		    	cell = new PdfPCell(new Phrase(entete));
@@ -217,52 +203,52 @@ public class ExportService {
 			    table.addCell(cell);
 		    }
 		    
-		    Double totalVitaminesRecette = 0d;
-		    Double totalMinerauxRecette = 0d;
-		    
-			for(RecetteIngredient ingredient : recette.getRecetteIngredients()) {
-			
-				Double vitaminesParIngredient = ingredient.getIngredients().getVitamines()*ingredient.getQuantite()/1000;;
-				Double minerauxParIngredient = ingredient.getIngredients().getMineraux()*ingredient.getQuantite()/1000;;
+		    // Nutriments par ingredient
+			for(RecetteIngredient recetteIngredient : recette.getRecetteIngredients()) {
 				
-				totalVitaminesRecette += vitaminesParIngredient;
-				totalMinerauxRecette += minerauxParIngredient;
+				table.addCell(recetteIngredient.getIngredients().getLibelle());
+				table.addCell(recetteIngredientService.quantiteIngredients(recetteIngredient));
 				
-				table.addCell(ingredient.getIngredients().getLibelle());
+				List<Double> nutrimentsParIngredients = 
+						recetteIngredientService.nutrimentsParIngredients_So_Fe_VC_VD_VB12(recetteIngredient);
+				Double quantite = recetteIngredient.getQuantite();
 				
-				if(UNITE.equals(ingredient.getIngredients().getUniteMesure())) {
-					table.addCell(ingredient.getQuantite().toString());
-				}else {
-					table.addCell(ingredient.getQuantite().toString()
-							+ " " + ingredient.getIngredients().getUniteMesure());
-				}
-				
-				table.addCell(vitaminesParIngredient.toString() + " mg ");
-				table.addCell(minerauxParIngredient.toString() + " mg " );
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(0)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(1)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(2)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(3)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(4)/1000*quantite) + " g ");
 			}
 			
-			totalVitaminesRecette = methodesPratiquesRepository.
-					deuxChiffresSignificatifs(totalVitaminesRecette);
-			totalMinerauxRecette = methodesPratiquesRepository.
-					deuxChiffresSignificatifs(totalMinerauxRecette);
-
+			// Total de la recette
 			table.addCell("Total de la recette");
 			table.addCell("");
-			table.addCell(totalVitaminesRecette.toString() + " g ");
-			table.addCell(totalMinerauxRecette.toString() + " g ");
+			table.addCell(mpr.
+					deuxChiffresSignificatifs(apports.get(0)/1000d).toString() + " g ");
+			table.addCell(mpr.
+					deuxChiffresSignificatifs(apports.get(1)/1000d).toString() + " g ");
+			table.addCell(mpr.
+					deuxChiffresSignificatifs(apports.get(2)/1000d).toString() + " g ");
+			table.addCell(mpr.
+					deuxChiffresSignificatifs(apports.get(3)/1000d).toString() + " g ");
+			table.addCell(mpr.
+					deuxChiffresSignificatifs(apports.get(4)/1000d).toString() + " g ");
 			table.setSpacingAfter(50);
 			
 			document.add(table);
 		}
-				
-		document.add(new Paragraph("Le bilan en vitamines est de " + methodesPratiquesRepository.
-				deuxChiffresSignificatifs(totalVitamines/1000) + " g " ));	
-		document.add(new Paragraph("Le bilan en mineraux est de " + methodesPratiquesRepository.
-				deuxChiffresSignificatifs(totalMineraux/1000) + " g "));
+		
+		// Bilan en nutriments de la semaine
+		document.add(new Paragraph("Le bilan en Sodium est de " + mpr.
+				deuxChiffresSignificatifs(totalSodium/1000) + " g " ));	
+		document.add(new Paragraph("Le bilan en Fer est de " + mpr.
+				deuxChiffresSignificatifs(totalFer/1000) + " g "));
+		document.add(new Paragraph("Le bilan en Vitamine C est de " + mpr.
+				deuxChiffresSignificatifs(totalVitamineC/1000) + " g "));
+		document.add(new Paragraph("Le bilan en Vitamine D est de " + mpr.
+				deuxChiffresSignificatifs(totalVitamineD/1000) + " g "));
+		document.add(new Paragraph("Le bilan en Vitamine B12 est de " + mpr.
+				deuxChiffresSignificatifs(totalVitamineB12/1000) + " g "));
 		document.close();
 	}
-	
-	
-	
-	
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MethodesPratiquesRepository {
 
-	
 	/**
 	 * Cette méthode prend en entrée un nombre décimal, et le renvoie avec deux chiffres significatifs
 	 * 
