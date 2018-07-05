@@ -37,7 +37,6 @@ public class ExportService {
 	@Autowired
 	RecetteIngredientService recetteIngredientService;
 	
-	
 	/**
 	 * Export PDF de la recette sélectionnée
 	 * 
@@ -54,6 +53,7 @@ public class ExportService {
 				
 		document.open();
 
+			// Reconstruction de l'objet recette
 			Recette recette = recetteService.getRecetteById(id);
 			
 			// Nom de la recette
@@ -84,8 +84,10 @@ public class ExportService {
 		    // Valeurs du tableau
 			for(RecetteIngredient recetteIngredient : recette.getRecetteIngredients()) {
 		
+				// Nom de l'ingredient
 				table.addCell(recetteIngredient.getIngredients().getLibelle());
 				
+				// Quantité d'ingredients
 				table.addCell(recetteIngredientService.quantiteIngredients(recetteIngredient));
 				
 				// Calcul des nutriments par ingredient
@@ -173,6 +175,8 @@ public class ExportService {
 		Double totalSodium = 0d;
 		
 		for (Recette recette : listeRecettes) {
+			
+			// Reconstruction de l'objet recette
 			recette = recetteService.getRecetteById(recette.getIdRecette());
 			
 			// Liste des apports
@@ -196,14 +200,13 @@ public class ExportService {
 		    
 		    // Création d'entête
 		    String[] entetes = {"Ingredients", "Quantite", "Sodium", "Fer", "Vitamine C", "Vitamine D", "Vitamine B12"};
-		    
 		    for(String entete : entetes) {
 		    	cell = new PdfPCell(new Phrase(entete));
 		    	cell.setBackgroundColor(BaseColor.CYAN);
 			    table.addCell(cell);
 		    }
 		    
-		    // Nutriments par ingredient
+		    // Mise dans le tableau Nutriments par ingredient
 			for(RecetteIngredient recetteIngredient : recette.getRecetteIngredients()) {
 				
 				table.addCell(recetteIngredient.getIngredients().getLibelle());
@@ -211,16 +214,15 @@ public class ExportService {
 				
 				List<Double> nutrimentsParIngredients = 
 						recetteIngredientService.nutrimentsParIngredients_So_Fe_VC_VD_VB12(recetteIngredient);
-				Double quantite = recetteIngredient.getQuantite();
 				
-				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(0)/1000*quantite) + " g ");
-				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(1)/1000*quantite) + " g ");
-				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(2)/1000*quantite) + " g ");
-				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(3)/1000*quantite) + " g ");
-				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(4)/1000*quantite) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(0)/1000) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(1)/1000) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(2)/1000) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(3)/1000) + " g ");
+				table.addCell(mpr.deuxChiffresSignificatifs(nutrimentsParIngredients.get(4)/1000) + " g ");
 			}
 			
-			// Total de la recette
+			// Mise dans le tableau du total de la recette
 			table.addCell("Total de la recette");
 			table.addCell("");
 			table.addCell(mpr.
