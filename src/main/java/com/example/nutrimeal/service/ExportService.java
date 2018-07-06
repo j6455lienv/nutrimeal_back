@@ -17,8 +17,11 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -37,6 +40,8 @@ public class ExportService {
 	@Autowired
 	RecetteIngredientService recetteIngredientService;
 	
+	public static final String IMAGE =  "src/main/resources/images/Night.png";
+	
 	/**
 	 * Export PDF de la recette sélectionnée
 	 * 
@@ -48,11 +53,15 @@ public class ExportService {
 	public void exportRecettePdf(OutputStream outputStream, Long id, Integer nb) 
 			throws Exception  {
 	
-		Document document = new Document();
-		PdfWriter.getInstance(document, outputStream);
-				
+		Document document = new Document(PageSize.A4);
+		PdfWriter writer =  PdfWriter.getInstance(document, outputStream);	
 		document.open();
-
+		PdfContentByte canvas = writer.getDirectContentUnder();
+		Image image = Image.getInstance(IMAGE);
+        image.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+        image.setAbsolutePosition(0, 0);
+        canvas.addImage(image);
+		
 			// Reconstruction de l'objet recette
 			Recette recette = recetteService.getRecetteById(id);
 			
