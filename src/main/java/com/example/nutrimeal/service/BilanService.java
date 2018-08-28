@@ -23,7 +23,7 @@ public class BilanService {
 	RecetteService recetteService;
 	
 	@Autowired
-	MethodesPratiquesRepository methodes;
+	MethodesPratiquesRepository mpr;
 	
 /**
  * 		Méthode qui renvoie un JSON pour le calcul du bilan de la semaine
@@ -64,8 +64,8 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 			setRecetteSansMapping.add(RecetteSansMapping);
 			
 			// Calculer le total pour le bilan
-			bilanFerTotal += apports.get(0);
-			bilanSodiumTotal += apports.get(1);
+			bilanSodiumTotal += apports.get(0);
+			bilanFerTotal += apports.get(1);
 			bilanVitamineCTotales += apports.get(2);
 			bilanVitamineDTotales += apports.get(3);
 			bilanVitamineB12Totales += apports.get(4);	
@@ -73,11 +73,11 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 		// Création du bilan de la semaine
 		BilanSemaine bilan = new BilanSemaine();
 		bilan.setListeRecettes(setRecetteSansMapping);
-		bilan.setBilanfer(bilanFerTotal);
-		bilan.setBilanSodium(bilanSodiumTotal);
-		bilan.setBilanVitamineC(bilanVitamineCTotales);
-		bilan.setBilanVitamineD(bilanVitamineDTotales);
-		bilan.setBilanVitamineB12(bilanVitamineB12Totales);
+		bilan.setBilanfer(mpr.deuxChiffresSignificatifs(bilanFerTotal));
+		bilan.setBilanSodium(mpr.deuxChiffresSignificatifs(bilanSodiumTotal));
+		bilan.setBilanVitamineC(mpr.deuxChiffresSignificatifs(bilanVitamineCTotales));
+		bilan.setBilanVitamineD(mpr.deuxChiffresSignificatifs(bilanVitamineDTotales));
+		bilan.setBilanVitamineB12(mpr.deuxChiffresSignificatifs(bilanVitamineB12Totales));
 		return bilan;
 	}
 }
