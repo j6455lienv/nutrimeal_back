@@ -9,6 +9,8 @@ public enum UniteMesure {
 	UNITE("unite"),
 	@JsonProperty("g")
 	GRAMME("g"),
+	@JsonProperty("µg")
+	MICROGRAMME("µg"),
 	@JsonProperty("cl")
 	CENTILITRE("cl");
 	

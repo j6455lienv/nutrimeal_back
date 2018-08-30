@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.nutrimeal.model.BilanSemaine;
 import com.example.nutrimeal.model.Recette;
+import com.example.nutrimeal.model.enumeration.UniteMesure;
 
 import utils.Constantes;
 import utils.MethodesPratiques;
@@ -24,15 +25,15 @@ public class BilanService {
 	@Autowired
 	RecetteService recetteService;
 	
-/**
- * 		Méthode qui renvoie un JSON pour le calcul du bilan de la semaine
- * @param listeRecettes
- * 		Liste de Recettes
- * @return
- * 		Un objet BilanSemaine qui sera renvoyé en JSON
- * @throws Exception
- */
-public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
+	/**
+	 * 		Méthode qui renvoie un JSON pour le calcul du bilan de la semaine
+	 * @param listeRecettes
+	 * 		Liste de Recettes
+	 * @return
+	 * 		Un objet BilanSemaine qui sera renvoyé en JSON
+	 * @throws Exception
+	 */
+	public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 				
 		Double bilanVitamineCTotales = 0d;
 		Double bilanVitamineDTotales = 0d;
@@ -82,6 +83,8 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 				* 100d / Constantes.VitamineD ));
 		bilan.setBilanVitamineB12(MethodesPratiques.deuxChiffresSignificatifs(bilanVitamineB12Totales
 				* 100d / Constantes.VitamineB12 ));
+		bilan.setUniteMineraux(UniteMesure.MICROGRAMME.getLabel());
+		
 		return bilan;
 	}
 }

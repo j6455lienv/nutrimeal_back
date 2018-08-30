@@ -28,4 +28,6 @@ public class BilanSemaine {
 	@Transient
 	private Double bilanVitamineB12;
 	
+	@Transient
+	private String uniteMineraux;
 }
