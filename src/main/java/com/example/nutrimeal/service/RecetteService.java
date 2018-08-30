@@ -1,10 +1,7 @@
 package com.example.nutrimeal.service;
 
 
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,8 +18,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.nutrimeal.model.Recette;
 import com.example.nutrimeal.model.RecetteIngredient;
-import com.example.nutrimeal.repository.MethodesPratiquesRepository;
 import com.example.nutrimeal.repository.RecetteRepository;
+
+import utils.Constantes;
+import utils.MethodesPratiques;
 
 
 /**
@@ -33,33 +32,8 @@ import com.example.nutrimeal.repository.RecetteRepository;
 @Service
 public class RecetteService {
 	
-	/** Nombre de recettes aléatoirement tirées de la base pour le carroussel.*/
-	private static final int CARROUSSEL_RECETTE_NUMBER = 10;
-
-	/**
-	 * Nom de la BDD
-	 */
-	public final static String database = "jdbc:h2:mem:test";
-	
-	/**
-	 * User
-	 */
-	public final static String userName = "sa";
-	
-	/**
-	 * mdp
-	 */
-	public final static String password = "";
-	
-	/**
-	 * Requête SQL pour alimentation des listes
-	 */
-	public final static String listesFront = "select ID_RECETTE, NOM_RECETTE from RECETTE";
-	
-	@Autowired
-	MethodesPratiquesRepository methodesPratiquesRepository;
 	@Autowired 
-	private RecetteRepository recetteRepository;
+	RecetteRepository recetteRepository;
 		
 	/**
 	 * Méthode qui retourne une recette lorsque l'on donne une idRecette
@@ -82,18 +56,17 @@ public class RecetteService {
 	 */
     public Map<Long, String> alimentationListesRecettes() throws SQLException{
 	
-    // Connection à la database et requête sur NOM_RECETTE et ID_RECETTE
-    Statement stmt = null;
-	stmt = DriverManager.getConnection(database, userName, password).createStatement();
-	ResultSet rs =  stmt.executeQuery(listesFront);
-		
+    	List<Recette> listeRecettes = recetteRepository.findAll();
+    	
 	Map<Long, String> listePaireIdRecetteNomRecette = new HashMap<>();
-		while(rs.next()) {
-			String value = rs.getString("NOM_RECETTE");
-			Long key = rs.getLong("ID_RECETTE");
-			
-		listePaireIdRecetteNomRecette.put(key, value);
+	
+		for (Recette recette : listeRecettes ) 
+		{
+			String value = recette.getNomRecette();	
+			Long key = recette.getId();		
+			listePaireIdRecetteNomRecette.put(key, value);			
 		}
+		
 	return listePaireIdRecetteNomRecette;
 	
     }
@@ -129,7 +102,7 @@ public class RecetteService {
 			int elementIndexInPage;
 			List<Recette> pageContent;
 			
-			while (i < CARROUSSEL_RECETTE_NUMBER) {
+			while (i < Constantes.CARROUSSEL_RECETTE_NUMBER) {
 				randomRecetteIndex = (int) (Math.floor(Math.random() * totalElementsNumber));
 				askedPage = (int) (Math.floor(randomRecetteIndex / elementsPerPage));
 				
@@ -149,31 +122,28 @@ public class RecetteService {
 	 * Permet de calculer les apports en vitamines et en minéraux d'une recette.
 	 * @param recette la recette dont on veut calculer les apports
 	 * @return la recette mise à jour avec ses apports
+	 * @throws Exception 
 	 */
-	public Recette computeValues(Recette recette) {
-		double vitamineC = 0d;
-		double vitamineD = 0d;
-		double vitamineB12 = 0d;
-		double fer = 0d;
-		double sodium = 0d;
-		for (RecetteIngredient re : recette.getRecetteIngredients()) {
-			vitamineC += (re.getIngredients().getVitamineC() * re.getQuantite());
-			vitamineD += (re.getIngredients().getVitamineD() * re.getQuantite());
-			vitamineB12 += (re.getIngredients().getVitamineB12() * re.getQuantite());
-			fer += (re.getIngredients().getFer() * re.getQuantite());
-			sodium += (re.getIngredients().getSodium() * re.getQuantite());
-		}
-		recette.setFerParPortion(fer);
-		recette.setSodiumParPortion(sodium);
-		recette.setVitamineCParPortion(vitamineC);
-		recette.setVitamineDParPortion(vitamineD);
-		recette.setVitamineB12ParPortion(vitamineB12);
+	public Recette computeValues(Recette recette) throws Exception {
+		
+		List<Double> apports = calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
+		
+		recette.setSodiumParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+				apports.get(0) * 100d / Constantes.Sodium));
+		recette.setFerParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+				apports.get(1) * 100d / Constantes.Fer));
+		recette.setVitamineCParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+				apports.get(2) * 100d / Constantes.VitamineC));
+		recette.setVitamineDParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+				apports.get(3) * 100d / Constantes.VitamineD));
+		recette.setVitamineB12ParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+				apports.get(4) * 100d / Constantes.VitamineB12));
 		
 		return recette;
 	}
 	
 	/**
-	 * La méthode renvoie 
+	 * La méthode renvoie une liste de valeurs nutritionnelles
 	 * 
 	 * @param Recette
 	 * 		Un objet Recette
@@ -206,5 +176,4 @@ public class RecetteService {
 			apports.add(vitamineB12);
 		return apports;
 	}
-	
 }

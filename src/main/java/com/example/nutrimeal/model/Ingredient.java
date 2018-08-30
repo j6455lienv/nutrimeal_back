@@ -27,7 +27,7 @@ public class Ingredient {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_INGREDIENT")
-	private Long idIngredient;
+	private Long id;
 	
 	@OneToMany(mappedBy="ingredients")
 	@JsonIgnore

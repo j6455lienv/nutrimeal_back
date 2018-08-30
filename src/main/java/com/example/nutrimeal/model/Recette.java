@@ -25,7 +25,7 @@ public class Recette {
 	@Id 
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_RECETTE")
-    private Long idRecette;	
+    private Long id;	
 
     @OneToMany(mappedBy="idRecette")
     private Set<RecetteIngredient> recetteIngredients = new HashSet<>();

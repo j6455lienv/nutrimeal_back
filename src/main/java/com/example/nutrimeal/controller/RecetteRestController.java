@@ -36,9 +36,10 @@ public class RecetteRestController {
 	
 	/** Renvoi la recette persistée demandée par une requête.
 	 * @param id l'id de la recette
-	 * @return une réponse HTTP avec la recette serialisée*/
+	 * @return une réponse HTTP avec la recette serialisée
+	 * @throws Exception */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Recette> findThisRecette(@PathVariable("id") Long id ) {
+	public ResponseEntity<Recette> findThisRecette(@PathVariable("id") Long id ) throws Exception {
 		Optional<Recette> recette = recetteService.get(id);
 		if (recette.isPresent()) {
 			Recette foundRecette = recette.get();
