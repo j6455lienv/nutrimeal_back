@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.nutrimeal.model.BilanSemaine;
 import com.example.nutrimeal.model.Recette;
-import com.example.nutrimeal.repository.MethodesPratiquesRepository;
+
+import utils.Constantes;
+import utils.MethodesPratiques;
 
 /**
  * 
@@ -21,9 +23,6 @@ public class BilanService {
 
 	@Autowired
 	RecetteService recetteService;
-	
-	@Autowired
-	MethodesPratiquesRepository mpr;
 	
 /**
  * 		Méthode qui renvoie un JSON pour le calcul du bilan de la semaine
@@ -41,13 +40,13 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 		Double bilanFerTotal = 0d;
 		Double bilanSodiumTotal = 0d;
 				
-		// Création d'un Set sans mapping
+		// Création d'un Set Recette sans mapping
 		Set<Recette> setRecetteSansMapping = new HashSet<Recette>();
 		
 		for(Recette recette : listeRecettes) {
 			
 			// Reconstruction du mapping et calcul des minéraux / Vitamines
-			recette = recetteService.getRecetteById(recette.getIdRecette());
+			recette = recetteService.getRecetteById(recette.getId());
 			
 			// Pour chaque ingrédient, la quantité est multipliée par les minéraux par ingrédient.
 			List<Double> apports = recetteService.calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
@@ -73,11 +72,16 @@ public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception{
 		// Création du bilan de la semaine
 		BilanSemaine bilan = new BilanSemaine();
 		bilan.setListeRecettes(setRecetteSansMapping);
-		bilan.setBilanfer(mpr.deuxChiffresSignificatifs(bilanFerTotal));
-		bilan.setBilanSodium(mpr.deuxChiffresSignificatifs(bilanSodiumTotal));
-		bilan.setBilanVitamineC(mpr.deuxChiffresSignificatifs(bilanVitamineCTotales));
-		bilan.setBilanVitamineD(mpr.deuxChiffresSignificatifs(bilanVitamineDTotales));
-		bilan.setBilanVitamineB12(mpr.deuxChiffresSignificatifs(bilanVitamineB12Totales));
+		bilan.setBilanSodium(MethodesPratiques.deuxChiffresSignificatifs(bilanSodiumTotal
+				* 100d / Constantes.Sodium ));
+		bilan.setBilanfer(MethodesPratiques.deuxChiffresSignificatifs(bilanFerTotal 
+				* 100d / Constantes.Fer ));
+		bilan.setBilanVitamineC(MethodesPratiques.deuxChiffresSignificatifs(bilanVitamineCTotales
+				* 100d / Constantes.VitamineC ));
+		bilan.setBilanVitamineD(MethodesPratiques.deuxChiffresSignificatifs(bilanVitamineDTotales
+				* 100d / Constantes.VitamineD ));
+		bilan.setBilanVitamineB12(MethodesPratiques.deuxChiffresSignificatifs(bilanVitamineB12Totales
+				* 100d / Constantes.VitamineB12 ));
 		return bilan;
 	}
 }
