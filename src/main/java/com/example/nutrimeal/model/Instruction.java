@@ -28,3 +28,4 @@ public class Instruction {
 	@Column(name = "ID_RECETTE")
 	private Long recetteId;
 }
+
