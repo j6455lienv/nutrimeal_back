@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.nutrimeal.model.BilanSemaine;
 import com.example.nutrimeal.model.Recette;
-import com.example.nutrimeal.model.enumeration.UniteMesure;
 
 import utils.Constantes;
 import utils.MethodesPratiques;

@@ -11,7 +11,7 @@ public class Constantes {
 	/**
 	 * Emplacement de l'image de fond dans recette bilan
 	 */
-	public static final String ImagePdfBilan =  "src/main/resources/images/Night.png";
+	public static final String ImagePdfBilan =  "src/main/resources/images/BilanPdfWallpaper.png";
 	
 	/**
 	 * ApportsJournaliersRecommandés (µg)
