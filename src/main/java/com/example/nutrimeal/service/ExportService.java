@@ -21,6 +21,7 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -181,8 +182,10 @@ public class ExportService {
 		document.open();
 		PdfContentByte canvas = writer.getDirectContentUnder();		
 		
-
-
+		Paragraph paragraph1 = new Paragraph("Votre bilan : ");
+		paragraph1.setSpacingAfter(50f);
+	    document.add(paragraph1);
+	    
 		Double totalVitamineC = 0d;
 		Double totalVitamineD = 0d;
 		Double totalVitamineB12 = 0d;
@@ -210,7 +213,7 @@ public class ExportService {
 			cell = new PdfPCell(new Phrase("Composition de la recette : " + recette.getNomRecette()));
 		    cell.setColspan(7);
 			cell.setHorizontalAlignment(1);
-			cell.setBackgroundColor(BaseColor.GREEN);
+			cell.setBackgroundColor(BaseColor.GREEN.brighter());
 		    table.addCell(cell);
 		    
 		    // Création d'entête
@@ -218,14 +221,13 @@ public class ExportService {
 		    for(String entete : entetes) 
 		    {
 		    	cell = new PdfPCell(new Phrase(entete));
-		    	cell.setBackgroundColor(BaseColor.CYAN);
+		    	cell.setBackgroundColor(BaseColor.CYAN.brighter());
 			    table.addCell(cell);
 		    }
 		    
 		    // Mise dans le tableau Nutriments par ingredient
 			for(RecetteIngredient recetteIngredient : recette.getRecetteIngredients()) 
 			{
-				
 				table.addCell(recetteIngredient.getIngredients().getLibelle());
 				table.addCell(recetteIngredientService.quantiteIngredients(recetteIngredient));
 				
@@ -241,7 +243,7 @@ public class ExportService {
 				table.addCell(MethodesPratiques.deuxChiffresSignificatifs(nutrimentsParIngredients.get(3) 
 						* 100d / Constantes.VitamineD).toString() + " %");
 				table.addCell(MethodesPratiques.deuxChiffresSignificatifs(nutrimentsParIngredients.get(4) 
-						* 100d / Constantes.VitamineB12).toString() + " %");
+						* 100d / Constantes.VitamineB12).toString() + " %");	
 			}
 			
 			// Mise dans le tableau du total de la recette
@@ -279,6 +281,10 @@ public class ExportService {
         image.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
         image.setAbsolutePosition(0, 0);
         canvas.addImage(image);
+        
+        PdfGState gState = new PdfGState();
+        gState.setStrokeOpacity(0.5f);
+        canvas.setGState(gState);
 		
         document.close();
 		
