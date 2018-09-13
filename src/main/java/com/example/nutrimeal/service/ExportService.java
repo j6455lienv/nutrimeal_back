@@ -182,8 +182,10 @@ public class ExportService {
 		document.open();
 		PdfContentByte canvas = writer.getDirectContentUnder();		
 		
-
-
+		Paragraph paragraph1 = new Paragraph("Votre bilan : ");
+		paragraph1.setSpacingAfter(50f);
+	    document.add(paragraph1);
+	    
 		Double totalVitamineC = 0d;
 		Double totalVitamineD = 0d;
 		Double totalVitamineB12 = 0d;
