@@ -89,7 +89,7 @@ VALUES (3, 6, 18);
 
 -- INSTRUCTIONS 
 
--- LASAGNES 
+-- LASAGNES
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (1, 1, 'Cuire les feuilles de lasagnes. Egouttez et sécher.', 1);
@@ -104,7 +104,7 @@ INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (4, 5, 'Dans chaque plat individuel alterner : béchamel, bolognaise, lasagne...', 1);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
-VALUES (5, 4, 'Préparer la béchamel. Dans une casserole faire fondre le beurre et ajouter la farine toute en remuant à l\'aide d\'une cuillère. Ajouter le lait en remuant.', 1);
+VALUES (5, 4, 'Préparer la béchamel. Dans une casserole faire fondre le beurre et ajouter la farine toute en remuant à l aide d une cuillère. Ajouter le lait en remuant.', 1);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (6, 6, '20 min au four et le tour est joué !', 1);
@@ -112,16 +112,16 @@ VALUES (6, 6, '20 min au four et le tour est joué !', 1);
 -- MOUSSAKA
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
-VALUES (7, 1, 'Peler l\'oignon, le faire dorer dans une poêle. Ajoutez la viande hachée. Quand la viande est cuite ajouter la sauce tomate. Laisser mijoter.', 2);
+VALUES (7, 1, 'Peler l oignon, le faire dorer dans une poêle. Ajoutez la viande hachée. Quand la viande est cuite ajouter la sauce tomate. Laisser mijoter.', 2);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (8, 2, 'Préparer les aubergines. Les laver. Les couper en tranche de 5mm. Les faire frire.', 2);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
-VALUES (9, 3, 'Préparer la béchamel. Dans une casserole faire fondre le beurre et ajouter la farine toute en remuant à l\'aide d\'une cuillère. Ajouter le lait en remuant.', 2);
+VALUES (9, 3, 'Préparer la béchamel. Dans une casserole faire fondre le beurre et ajouter la farine toute en remuant à l aide d loune cuillère. Ajouter le lait en remuant.', 2);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
-VALUES (10, 4, 'Dans un plat, étaler une couche de sauce, une couche d\' aubergine, une couche de sauce, et une couche d\'aubergine. Napper de béchamel, et de gruyère.', 2);
+VALUES (10, 4, 'Dans un plat, étaler une couche de sauce, une couche d aubergine, une couche de sauce, et une couche d aubergine. Napper de béchamel, et de gruyère.', 2);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (11, 5, 'Cuire à 180 Th6 pendant 35 minutes.', 2);
@@ -132,7 +132,7 @@ INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (17, 1, 'Préparer votre pate à pizza.', 3);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
-VALUES (18, 2, 'Epluchez et émincer l\'oignon.', 3);
+VALUES (18, 2, 'Epluchez et émincer l oignon.', 3);
 
 INSERT INTO instruction(id_instruction, chrono, libelle, id_recette)
 VALUES (19, 3, 'Ajoutez la viande hachée dans la poele.', 3);
