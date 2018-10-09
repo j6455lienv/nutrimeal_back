@@ -6,10 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.nutrimeal.model.BilanSemaine;
 import com.example.nutrimeal.model.Recette;
@@ -35,7 +32,7 @@ public class BilanController {
    * @return Retourne le bilan : Recettes au format sans mapping et bilan minéral / vitaminal
    * @throws Exception exception
    */
-  @RequestMapping(value = "/bilan", method = RequestMethod.POST, produces = "application/json")
+  @PostMapping(path = "/bilan", produces = "application/json")
   public ResponseEntity<?> getListeRecettes(@RequestBody List<Recette> listeRecettes) throws Exception {
 
     BilanSemaine bilan = bilanService.bilanSemaine(listeRecettes);
@@ -53,7 +50,7 @@ public class BilanController {
    * @return Retourne une liste de Paires clés / valeurs NOM_RECETTE / ID_RECETTE pour les listes de recherche
    * @throws Exception
    */
-  @RequestMapping(value = "/bilan", method = RequestMethod.GET, produces = "application/json")
+  @GetMapping(path = "/bilan", produces = "application/json")
   public ResponseEntity<?> getNomRecettesEtIdRecette() throws Exception {
 
     Map<Long, String> listePaires = recetteService.alimentationListesRecettes();
