@@ -10,45 +10,43 @@ import com.example.nutrimeal.model.RecetteIngredient;
 @Service
 public class RecetteIngredientService {
 
-	private final String UNITE = "unité";
+  private final String UNITE = "unité";
 
-	/** Methode qui return une liste de Double dans l'ordre : Sodium, Fer, Vitamine C, Vitamine D, Vitamine B12
-	 * 
-	 * @param 
-	 * 		recetteIngredient
-	 * @return
-	 * 		List<Double> de nutriments
-	 */
-	public List<Double> nutrimentsParIngredients_So_Fe_VC_VD_VB12(RecetteIngredient recetteIngredient){
-		
-		List<Double> listeNutriments = new ArrayList<Double>(5);
-		
-		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getSodium());
-		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getFer());
-		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getVitamineC());
-		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getVitamineD());
-		listeNutriments.add(recetteIngredient.getQuantite()*recetteIngredient.getIngredients().getVitamineB12());
-		
-		return listeNutriments;
-	}
-	
-	/**		Methode qui return la quantité d'ingredients
-	 * 
-	 * @param recetteIngredient
-	 * 		RecetteIngredient qui contient la liste des ingredients et leur quantités
-	 * @return
-	 * 		String qui affiche la quantité et l'unité.
-	 */
-	public String quantiteIngredients(RecetteIngredient recetteIngredient) {
-		
-		String quantiteEtUnite;
-		
-		if(UNITE.equals(recetteIngredient.getIngredients().getUniteMesure().getLabel())) {
-			quantiteEtUnite = recetteIngredient.getQuantite().toString();
-		}else {
-			quantiteEtUnite = recetteIngredient.getQuantite().toString()
-					+ " " + recetteIngredient.getIngredients().getUniteMesure().getLabel();
-		}
-		return quantiteEtUnite;
-	}
+  /**
+   * Methode qui return une liste de Double dans l'ordre : Sodium, Fer, Vitamine C, Vitamine D, Vitamine B12
+   *
+   * @param recetteIngredient la recette et les ingredients
+   * @return List<Double> de nutriments
+   */
+  protected List<Double> nutrimentsParIngredients_So_Fe_VC_VD_VB12(RecetteIngredient recetteIngredient) {
+
+    List<Double> listeNutriments = new ArrayList<>(5);
+
+    listeNutriments.add(recetteIngredient.getQuantite() * recetteIngredient.getIngredients().getSodium());
+    listeNutriments.add(recetteIngredient.getQuantite() * recetteIngredient.getIngredients().getFer());
+    listeNutriments.add(recetteIngredient.getQuantite() * recetteIngredient.getIngredients().getVitamineC());
+    listeNutriments.add(recetteIngredient.getQuantite() * recetteIngredient.getIngredients().getVitamineD());
+    listeNutriments.add(recetteIngredient.getQuantite() * recetteIngredient.getIngredients().getVitamineB12());
+
+    return listeNutriments;
+  }
+
+  /**
+   * Methode qui return la quantité d'ingredients
+   *
+   * @param recetteIngredient RecetteIngredient qui contient la liste des ingredients et leur quantités
+   * @return String qui affiche la quantité et l'unité.
+   */
+  protected String quantiteIngredients(RecetteIngredient recetteIngredient) {
+
+    String quantiteEtUnite;
+
+    if (UNITE.equals(recetteIngredient.getIngredients().getUniteMesure().getLabel())) {
+      quantiteEtUnite = recetteIngredient.getQuantite().toString();
+    } else {
+      quantiteEtUnite = recetteIngredient.getQuantite().toString()
+          + " " + recetteIngredient.getIngredients().getUniteMesure().getLabel();
+    }
+    return quantiteEtUnite;
+  }
 }

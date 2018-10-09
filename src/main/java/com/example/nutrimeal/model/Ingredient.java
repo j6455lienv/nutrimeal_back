@@ -24,34 +24,34 @@ import lombok.Setter;
 @Setter
 public class Ingredient {
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_INGREDIENT")
-	private Long id;
-	
-	@OneToMany(mappedBy="ingredients")
-	@JsonIgnore
-	public Set<RecetteIngredient> listeRecettes = new HashSet<>();
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "ID_INGREDIENT")
+  private Long id;
 
-	@Column
-	private String libelle;
+  @OneToMany(mappedBy = "ingredients")
+  @JsonIgnore
+  public Set<RecetteIngredient> listeRecettes = new HashSet<>();
 
-	@Column(name = "UNITE_MESURE")
-	@Convert(converter = UniteMesureConverter.class)
-	private UniteMesure uniteMesure;
-	
-	@Column
-	private Double vitamineC;
-	
-	@Column
-	private Double vitamineD;
-	
-	@Column
-	private Double vitamineB12;
-	
-	@Column
-	private Double fer;
-	
-	@Column
-	private Double sodium;
+  @Column
+  private String libelle;
+
+  @Column(name = "UNITE_MESURE")
+  @Convert(converter = UniteMesureConverter.class)
+  private UniteMesure uniteMesure;
+
+  @Column
+  private Double vitamineC;
+
+  @Column
+  private Double vitamineD;
+
+  @Column
+  private Double vitamineB12;
+
+  @Column
+  private Double fer;
+
+  @Column
+  private Double sodium;
 }

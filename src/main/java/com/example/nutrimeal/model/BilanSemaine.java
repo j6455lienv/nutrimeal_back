@@ -11,23 +11,23 @@ import lombok.Setter;
 @Setter
 public class BilanSemaine {
 
-	private Set<Recette> listeRecettes;
+  private Set<Recette> listeRecettes;
 
-	@Transient
-	private Double bilanfer;
-	
-	@Transient
-	private Double bilanSodium;
-	
-	@Transient
-	private Double bilanVitamineD;
-	
-	@Transient
-	private Double bilanVitamineC;
-	
-	@Transient
-	private Double bilanVitamineB12;
-	
-	@Transient
-	private String uniteMineraux;
+  @Transient
+  private Double bilanfer;
+
+  @Transient
+  private Double bilanSodium;
+
+  @Transient
+  private Double bilanVitamineD;
+
+  @Transient
+  private Double bilanVitamineC;
+
+  @Transient
+  private Double bilanVitamineB12;
+
+  @Transient
+  private String uniteMineraux;
 }

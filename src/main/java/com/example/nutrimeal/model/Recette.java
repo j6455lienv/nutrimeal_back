@@ -22,40 +22,40 @@ import lombok.Setter;
 @Setter
 public class Recette {
 
-	@Id 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_RECETTE")
-    private Long id;	
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "ID_RECETTE")
+  private Long id;
 
-    @OneToMany(mappedBy="idRecette")
-    private Set<RecetteIngredient> recetteIngredients = new HashSet<>();
+  @OneToMany(mappedBy = "idRecette")
+  private Set<RecetteIngredient> recetteIngredients = new HashSet<>();
 
-	@Column(name = "NOM_RECETTE")
-	private String nomRecette;
-	
-	@Column(name = "TEMPS_PREPARATION")
-	private Integer tempsPreparation;
-	
-	@Transient
-	private Double ferParPortion;
-	
-	@Transient
-	private Double sodiumParPortion;
-	
-	@Transient
-	private Double vitamineDParPortion;
-	
-	@Transient
-	private Double vitamineCParPortion;
-	
-	@Transient
-	private Double vitamineB12ParPortion;
-	
-	@Column(name = "image_recette")
-	private String base64ImageCode;	
-	
-	@OneToMany(mappedBy="recetteId")
-    @OrderBy(value = "chrono")
-    private Set<Instruction> instructions = new LinkedHashSet<>();
-	
+  @Column(name = "NOM_RECETTE")
+  private String nomRecette;
+
+  @Column(name = "TEMPS_PREPARATION")
+  private Integer tempsPreparation;
+
+  @Transient
+  private Double ferParPortion;
+
+  @Transient
+  private Double sodiumParPortion;
+
+  @Transient
+  private Double vitamineDParPortion;
+
+  @Transient
+  private Double vitamineCParPortion;
+
+  @Transient
+  private Double vitamineB12ParPortion;
+
+  @Column(name = "image_recette")
+  private String base64ImageCode;
+
+  @OneToMany(mappedBy = "recetteId")
+  @OrderBy(value = "chrono")
+  private Set<Instruction> instructions = new LinkedHashSet<>();
+
 }
