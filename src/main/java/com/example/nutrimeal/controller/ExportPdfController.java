@@ -11,20 +11,21 @@ import com.example.nutrimeal.model.Recette;
 import com.example.nutrimeal.service.ExportService;
 
 @RestController
-public class ExportController {
+public class ExportPdfController {
 
   private ExportService exportService;
 
   @Autowired
-  private ExportController(ExportService exportService) {
+  private ExportPdfController(ExportService exportService) {
     this.exportService = exportService;
   }
 
   /**
-   * Méthode qui exporte en pdf la liste des recettes, minéraux, vitamines et ingredients
+   * Export list of
    *
-   * @param response Réponse du server HTTP
-   * @throws Exception On throws une exception
+   * @param listeRecettes List Recette
+   * @param response      HttpServletResponse, callback response
+   * @throws Exception ex
    */
   @RequestMapping("/bilan/pdf")
   public void exportBilanPDF(@RequestBody List<Recette> listeRecettes,
@@ -37,8 +38,10 @@ public class ExportController {
   /**
    * Exporte en pdf la recette persistée demandée par une requête.
    *
-   * @param id l'id de la recette
-   * @throws Exception   excep
+   * @param id       Long ID of the recette
+   * @param nb       Integer numbers of persons
+   * @param response HttpServletResponse, callback response
+   * @throws Exception ex
    */
   @GetMapping(path = "/recette/{id}/nbPersonnes/{nb}/pdf")
   public void exportPdfThisRecette(@PathVariable("id") Long id, @PathVariable("nb") Integer nb,

@@ -2,6 +2,7 @@ package com.example.nutrimeal.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;

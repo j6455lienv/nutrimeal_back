@@ -16,7 +16,7 @@ public class RecetteIngredientService {
    * Methode qui return une liste de Double dans l'ordre : Sodium, Fer, Vitamine C, Vitamine D, Vitamine B12
    *
    * @param recetteIngredient la recette et les ingredients
-   * @return List<Double> de nutriments
+   * @return List_Double de nutriments
    */
   protected List<Double> nutrimentsParIngredients(RecetteIngredient recetteIngredient) {
 

@@ -1,8 +1,8 @@
 package utils;
 
-public class handleNumbers {
+public class HandleNumbers {
 
-  private handleNumbers() {
+  private HandleNumbers() {
   }
 
   /**

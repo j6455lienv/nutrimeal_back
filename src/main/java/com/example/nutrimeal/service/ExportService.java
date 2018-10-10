@@ -26,7 +26,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import utils.Constantes;
-import utils.handleNumbers;
+import utils.HandleNumbers;
 
 @Service
 public class ExportService {
@@ -98,20 +98,15 @@ public class ExportService {
     createTable(recette, table);
 
     // Appel de la méthode de calcul de nutriments par recette
-    List<Double> apports = recetteService.calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
+    List<Double> apports = recetteService.calculNutrimentsParRecette(recette);
 
     table.addCell("Total de la recette");
     table.addCell("");
-    table.addCell(handleNumbers.get(apports.get(0)
-        * 100d / Constantes.SODIUM).toString() + " %");
-    table.addCell(handleNumbers.get(apports.get(1)
-        * 100d / Constantes.FER).toString() + " %");
-    table.addCell(handleNumbers.get(apports.get(2)
-        * 100d / Constantes.VITAMINE_C).toString() + " %");
-    table.addCell(handleNumbers.get(apports.get(3)
-        * 100d / Constantes.VITAMINE_D).toString() + " %");
-    table.addCell(handleNumbers.get(apports.get(4)
-        * 100d / Constantes.VITAMINE_B12).toString() + " %");
+    table.addCell(HandleNumbers.get(apports.get(0) * 100d / Constantes.SODIUM).toString() + " %");
+    table.addCell(HandleNumbers.get(apports.get(1) * 100d / Constantes.FER).toString() + " %");
+    table.addCell(HandleNumbers.get(apports.get(2) * 100d / Constantes.VITAMINE_C).toString() + " %");
+    table.addCell(HandleNumbers.get(apports.get(3) * 100d / Constantes.VITAMINE_D).toString() + " %");
+    table.addCell(HandleNumbers.get(apports.get(4) * 100d / Constantes.VITAMINE_B12).toString() + " %");
     table.setSpacingAfter(50);
 
     document.add(table);
@@ -139,7 +134,7 @@ public class ExportService {
     for (RecetteIngredient ri : recette.getRecetteIngredients()) {
 
       String unite = ri.getIngredients().getUniteMesure().getLabel();
-      Double quantite = handleNumbers.get(nb * ri.getQuantite());
+      Double quantite = HandleNumbers.get(nb * ri.getQuantite());
       document.add(new Paragraph(ri.getIngredients().getLibelle() + " : " + quantite.toString() + " " + unite + " "));
     }
 
@@ -153,8 +148,7 @@ public class ExportService {
    * @param listeRecettes Liste de recettes au format JSON
    * @throws Exception On throws une exception
    */
-  public void exportBilanPdf(OutputStream outputStream, List<Recette> listeRecettes)
-      throws Exception {
+  public void exportBilanPdf(OutputStream outputStream, List<Recette> listeRecettes) throws Exception {
 
     Document document = new Document(PageSize.A4);
     PdfWriter writer = PdfWriter.getInstance(document, outputStream);
@@ -177,7 +171,7 @@ public class ExportService {
       recette = recetteService.getRecetteById(recette.getId());
 
       // Liste des apports
-      List<Double> apports = recetteService.calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
+      List<Double> apports = recetteService.calculNutrimentsParRecette(recette);
 
       totalSodium += apports.get(0);
       totalFer += apports.get(1);
@@ -209,32 +203,22 @@ public class ExportService {
       // Mise dans le tableau du total de la recette
       table.addCell("Total de la recette");
       table.addCell("");
-      table.addCell(handleNumbers.
-          get(apports.get(0) * 100d / Constantes.SODIUM).toString() + " %");
-      table.addCell(handleNumbers.
-          get(apports.get(1) * 100d / Constantes.FER).toString() + " %");
-      table.addCell(handleNumbers.
-          get(apports.get(2) * 100d / Constantes.VITAMINE_C).toString() + " %");
-      table.addCell(handleNumbers.
-          get(apports.get(3) * 100d / Constantes.VITAMINE_D).toString() + " %");
-      table.addCell(handleNumbers.
-          get(apports.get(4) * 100d / Constantes.VITAMINE_B12).toString() + " %");
+      table.addCell(HandleNumbers.get(apports.get(0) * 100d / Constantes.SODIUM).toString() + " %");
+      table.addCell(HandleNumbers.get(apports.get(1) * 100d / Constantes.FER).toString() + " %");
+      table.addCell(HandleNumbers.get(apports.get(2) * 100d / Constantes.VITAMINE_C).toString() + " %");
+      table.addCell(HandleNumbers.get(apports.get(3) * 100d / Constantes.VITAMINE_D).toString() + " %");
+      table.addCell(HandleNumbers.get(apports.get(4) * 100d / Constantes.VITAMINE_B12).toString() + " %");
       table.setSpacingAfter(50);
 
       document.add(table);
     }
 
     // Bilan en nutriments de la semaine
-    document.add(new Paragraph("Le bilan en Sodium est de " + handleNumbers.
-        get(totalSodium) + " µg "));
-    document.add(new Paragraph("Le bilan en Fer est de " + handleNumbers.
-        get(totalFer) + " µg "));
-    document.add(new Paragraph("Le bilan en Vitamine C est de " + handleNumbers.
-        get(totalVitamineC) + " µg "));
-    document.add(new Paragraph("Le bilan en Vitamine D est de " + handleNumbers.
-        get(totalVitamineD) + " µg "));
-    document.add(new Paragraph("Le bilan en Vitamine B12 est de " + handleNumbers.
-        get(totalVitamineB12) + " µg "));
+    document.add(new Paragraph("Le bilan en Sodium est de " + HandleNumbers.get(totalSodium) + " µg "));
+    document.add(new Paragraph("Le bilan en Fer est de " + HandleNumbers.get(totalFer) + " µg "));
+    document.add(new Paragraph("Le bilan en Vitamine C est de " + HandleNumbers.get(totalVitamineC) + " µg "));
+    document.add(new Paragraph("Le bilan en Vitamine D est de " + HandleNumbers.get(totalVitamineD) + " µg "));
+    document.add(new Paragraph("Le bilan en Vitamine B12 est de " + HandleNumbers.get(totalVitamineB12) + " µg "));
 
 
     Image image = Image.getInstance(Constantes.IMAGES_PDF_BILAN);
@@ -251,7 +235,7 @@ public class ExportService {
   }
 
   // delete duplicated code
-  private void createTable(Recette recette, PdfPTable table){
+  private void createTable(Recette recette, PdfPTable table) {
     // Mise dans le tableau Nutriments par ingredient
     for (RecetteIngredient recetteIngredient : recette.getRecetteIngredients()) {
       // Nom de l'ingredient
@@ -261,11 +245,11 @@ public class ExportService {
       // Calcul des nutriments par ingredient
       List<Double> nutrimentsIngredients = recetteIngredientService.nutrimentsParIngredients(recetteIngredient);
 
-      table.addCell(handleNumbers.get(nutrimentsIngredients.get(0) * 100d / Constantes.SODIUM).toString() + " %");
-      table.addCell(handleNumbers.get(nutrimentsIngredients.get(1) * 100d / Constantes.FER).toString() + " %");
-      table.addCell(handleNumbers.get(nutrimentsIngredients.get(2) * 100d / Constantes.VITAMINE_C).toString() + " %");
-      table.addCell(handleNumbers.get(nutrimentsIngredients.get(3) * 100d / Constantes.VITAMINE_D).toString() + " %");
-      table.addCell(handleNumbers.get(nutrimentsIngredients.get(4) * 100d / Constantes.VITAMINE_B12).toString() + " %");
+      table.addCell(HandleNumbers.get(nutrimentsIngredients.get(0) * 100d / Constantes.SODIUM).toString() + " %");
+      table.addCell(HandleNumbers.get(nutrimentsIngredients.get(1) * 100d / Constantes.FER).toString() + " %");
+      table.addCell(HandleNumbers.get(nutrimentsIngredients.get(2) * 100d / Constantes.VITAMINE_C).toString() + " %");
+      table.addCell(HandleNumbers.get(nutrimentsIngredients.get(3) * 100d / Constantes.VITAMINE_D).toString() + " %");
+      table.addCell(HandleNumbers.get(nutrimentsIngredients.get(4) * 100d / Constantes.VITAMINE_B12).toString() + " %");
     }
   }
 }

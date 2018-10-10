@@ -1,14 +1,7 @@
 package com.example.nutrimeal.service;
 
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +14,7 @@ import com.example.nutrimeal.model.RecetteIngredient;
 import com.example.nutrimeal.repository.RecetteRepository;
 
 import utils.Constantes;
-import utils.handleNumbers;
+import utils.HandleNumbers;
 
 @Service
 public class RecetteService {
@@ -46,10 +39,9 @@ public class RecetteService {
   /**
    * Méthode qui extrait la liste des recettes au format clé / valeur
    *
-   * @return Liste<Paire> utilisée pour alimenter les listes de recettes
-   * @throws SQLException
+   * @return Liste_Paire, utilisee pour alimenter les listes de recettes
    */
-  public Map<Long, String> alimentationListesRecettes() throws SQLException {
+  public Map<Long, String> alimentationListesRecettes() {
 
     List<Recette> listeRecettes = recetteRepository.findAll();
 
@@ -106,8 +98,9 @@ public class RecetteService {
       List<Recette> pageContent;
 
       while (i < Constantes.CARROUSSEL_RECETTE_NUMBER) {
-        randomRecetteIndex = (int) (Math.floor(Math.random() * totalElementsNumber));
-        askedPage = (int) (Math.floor(randomRecetteIndex / elementsPerPage));
+        Random r = new Random();
+        randomRecetteIndex = r.nextInt((int) totalElementsNumber);
+        askedPage = r.nextInt((int) (randomRecetteIndex / (double) elementsPerPage));
 
         recetteListe = recetteRepository.findByBase64ImageCodeNotNull(PageRequest.of(askedPage, elementsPerPage));
 
@@ -126,22 +119,16 @@ public class RecetteService {
    *
    * @param recette la recette dont on veut calculer les apports
    * @return la recette mise à jour avec ses apports
-   * @throws Exception
    */
-  public Recette computeValues(Recette recette) throws Exception {
+  public Recette computeValues(Recette recette) {
 
-    List<Double> apports = calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
+    List<Double> apports = calculNutrimentsParRecette(recette);
 
-    recette.setSodiumParPortion(handleNumbers.get(
-        apports.get(0) * 100d / Constantes.SODIUM));
-    recette.setFerParPortion(handleNumbers.get(
-        apports.get(1) * 100d / Constantes.FER));
-    recette.setVitamineCParPortion(handleNumbers.get(
-        apports.get(2) * 100d / Constantes.VITAMINE_C));
-    recette.setVitamineDParPortion(handleNumbers.get(
-        apports.get(3) * 100d / Constantes.VITAMINE_D));
-    recette.setVitamineB12ParPortion(handleNumbers.get(
-        apports.get(4) * 100d / Constantes.VITAMINE_B12));
+    recette.setSodiumParPortion(HandleNumbers.get(apports.get(0) * 100d / Constantes.SODIUM));
+    recette.setFerParPortion(HandleNumbers.get(apports.get(1) * 100d / Constantes.FER));
+    recette.setVitamineCParPortion(HandleNumbers.get(apports.get(2) * 100d / Constantes.VITAMINE_C));
+    recette.setVitamineDParPortion(HandleNumbers.get(apports.get(3) * 100d / Constantes.VITAMINE_D));
+    recette.setVitamineB12ParPortion(HandleNumbers.get(apports.get(4) * 100d / Constantes.VITAMINE_B12));
 
     return recette;
   }
@@ -150,11 +137,9 @@ public class RecetteService {
    * La méthode renvoie une liste de valeurs nutritionnelles
    *
    * @param recette Un objet Recette
-   * @return vitaminesTotales
-   * Retourne le total en nutriments de la recette (List<Double> dans l'ordre So, Fe, VC,, VD, VB12)
-   * @throws Exception
+   * @return vitaminesTotales total en nutriments de la recette,List_Double So, Fe, VC,, VD, VB12)
    */
-  public List<Double> calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(Recette recette) throws Exception {
+  public List<Double> calculNutrimentsParRecette(Recette recette) {
 
     double sodium = 0d;
     double fer = 0d;

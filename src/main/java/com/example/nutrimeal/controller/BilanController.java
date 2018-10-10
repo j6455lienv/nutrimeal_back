@@ -30,7 +30,7 @@ public class BilanController {
    *
    * @param listeRecettes Liste des recettes au format JSON
    * @return Retourne le bilan : Recettes au format sans mapping et bilan minéral / vitaminal
-   * @throws Exception exception
+   * @throws Exception ex
    */
   @PostMapping(path = "/bilan", produces = "application/json")
   public ResponseEntity<?> getListeRecettes(@RequestBody List<Recette> listeRecettes) throws Exception {
@@ -48,10 +48,9 @@ public class BilanController {
    * Méthode du RestController qui envoie un tableau de nom recettes et d'ID_RECETTE au front.
    *
    * @return Retourne une liste de Paires clés / valeurs NOM_RECETTE / ID_RECETTE pour les listes de recherche
-   * @throws Exception
    */
   @GetMapping(path = "/bilan", produces = "application/json")
-  public ResponseEntity<?> getNomRecettesEtIdRecette() throws Exception {
+  public ResponseEntity<?> getNomRecettesEtIdRecette() {
 
     Map<Long, String> listePaires = recetteService.alimentationListesRecettes();
 

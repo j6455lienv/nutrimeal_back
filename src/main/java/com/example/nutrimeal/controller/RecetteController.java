@@ -15,20 +15,21 @@ import com.example.nutrimeal.service.RecetteService;
 
 @RestController
 @RequestMapping(value = "/recette")
-public class RecetteRestController {
+public class RecetteController {
 
   private final RecetteService recetteService;
 
   @Autowired
-  public RecetteRestController(RecetteService pRecetteService) {
+  public RecetteController(RecetteService pRecetteService) {
     this.recetteService = pRecetteService;
   }
 
   /**
    * Renvoi une liste de recette dont le nom contient une chaine de caractère.
    *
-   * @param string la string à rechercher
-   * @return une réponse HTTP avec la liste des recettes persistées contenant la chaine de caractère dans leur libellé
+   * @param string   String, String to search
+   * @param pageable Pageable
+   * @return ResponseEntity_Page_Recette, recette list persisted
    */
   @GetMapping(path = "/search")
   public ResponseEntity<Page<Recette>> searchRecette(@RequestParam String string, Pageable pageable) {
@@ -39,12 +40,11 @@ public class RecetteRestController {
   /**
    * Renvoi la recette persistée demandée par une requête.
    *
-   * @param id l'id de la recette
-   * @return une réponse HTTP avec la recette serialisée
-   * @throws Exception exception
+   * @param id Long recette id
+   * @return ResponseEntity_Recette_, recette persisted
    */
   @GetMapping(path = "/{id}")
-  public ResponseEntity<Recette> findThisRecette(@PathVariable("id") Long id) throws Exception {
+  public ResponseEntity<Recette> findThisRecette(@PathVariable("id") Long id) {
     Optional<Recette> recette = recetteService.get(id);
     if (recette.isPresent()) {
       Recette foundRecette = recette.get();
