@@ -10,7 +10,7 @@ import com.example.nutrimeal.model.RecetteIngredient;
 @Service
 public class RecetteIngredientService {
 
-  private final String UNITE = "unité";
+  private static final String UNITE = "unité";
 
   /**
    * Methode qui return une liste de Double dans l'ordre : Sodium, Fer, Vitamine C, Vitamine D, Vitamine B12
@@ -18,7 +18,7 @@ public class RecetteIngredientService {
    * @param recetteIngredient la recette et les ingredients
    * @return List<Double> de nutriments
    */
-  protected List<Double> nutrimentsParIngredients_So_Fe_VC_VD_VB12(RecetteIngredient recetteIngredient) {
+  protected List<Double> nutrimentsParIngredients(RecetteIngredient recetteIngredient) {
 
     List<Double> listeNutriments = new ArrayList<>(5);
 

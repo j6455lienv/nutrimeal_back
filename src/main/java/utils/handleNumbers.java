@@ -1,8 +1,8 @@
 package utils;
 
-public class MethodesPratiques {
+public class handleNumbers {
 
-  private MethodesPratiques() {
+  private handleNumbers() {
   }
 
   /**
@@ -11,7 +11,7 @@ public class MethodesPratiques {
    * @param pNombre nombre de type Double en entrée
    * @return nombre de type Double arrondi à deux chiffres significatifs
    */
-  public static Double deuxChiffresSignificatifs(Double pNombre) {
+  public static Double get(Double pNombre) {
     return Math.round(pNombre * 100d) / 100d;
   }
 }

@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.example.nutrimeal.model.Ingredient;
 
 @Repository
-public interface IngredientRepository extends PagingAndSortingRepository<Ingredient, Long>{
-
+public interface IngredientRepository extends PagingAndSortingRepository<Ingredient, Long> {
 }

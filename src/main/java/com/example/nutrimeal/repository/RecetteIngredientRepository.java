@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.example.nutrimeal.model.RecetteIngredient;
 
 @Repository
-public interface RecetteIngredientRepository extends JpaRepository<RecetteIngredient, Long>{
-
+public interface RecetteIngredientRepository extends JpaRepository<RecetteIngredient, Long> {
 }

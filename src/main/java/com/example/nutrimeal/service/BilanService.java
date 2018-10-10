@@ -11,7 +11,7 @@ import com.example.nutrimeal.model.BilanSemaine;
 import com.example.nutrimeal.model.Recette;
 
 import utils.Constantes;
-import utils.MethodesPratiques;
+import utils.handleNumbers;
 
 @Service
 public class BilanService {
@@ -28,7 +28,7 @@ public class BilanService {
    *
    * @param listeRecettes Liste de Recettes
    * @return Un objet BilanSemaine qui sera renvoyé en JSON
-   * @throws Exception
+   * @throws Exception BilanSemaine exception
    */
   public BilanSemaine bilanSemaine(List<Recette> listeRecettes) throws Exception {
 
@@ -50,20 +50,20 @@ public class BilanService {
       List<Double> apports = recetteService.calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
 
       // Créer un petit objet non mappé (plus léger pour le front)
-      Recette RecetteSansMapping = new Recette();
-      RecetteSansMapping.setNomRecette(recette.getNomRecette());
-      RecetteSansMapping.setSodiumParPortion(MethodesPratiques.deuxChiffresSignificatifs(apports.get(0)
+      Recette recetteSansMapping = new Recette();
+      recetteSansMapping.setNomRecette(recette.getNomRecette());
+      recetteSansMapping.setSodiumParPortion(handleNumbers.get(apports.get(0)
           * 100d / Constantes.SODIUM));
-      RecetteSansMapping.setFerParPortion(MethodesPratiques.deuxChiffresSignificatifs(apports.get(1)
+      recetteSansMapping.setFerParPortion(handleNumbers.get(apports.get(1)
           * 100d / Constantes.FER));
-      RecetteSansMapping.setVitamineCParPortion(MethodesPratiques.deuxChiffresSignificatifs(apports.get(2)
+      recetteSansMapping.setVitamineCParPortion(handleNumbers.get(apports.get(2)
           * 100d / Constantes.VITAMINE_C));
-      RecetteSansMapping.setVitamineDParPortion(MethodesPratiques.deuxChiffresSignificatifs(apports.get(3)
+      recetteSansMapping.setVitamineDParPortion(handleNumbers.get(apports.get(3)
           * 100d / Constantes.VITAMINE_D));
-      RecetteSansMapping.setVitamineB12ParPortion(MethodesPratiques.deuxChiffresSignificatifs(apports.get(4)
+      recetteSansMapping.setVitamineB12ParPortion(handleNumbers.get(apports.get(4)
           * 100d / Constantes.VITAMINE_B12));
 
-      setRecetteSansMapping.add(RecetteSansMapping);
+      setRecetteSansMapping.add(recetteSansMapping);
 
       // Calculer le total pour le bilan
       bilanSodiumTotal += apports.get(0);

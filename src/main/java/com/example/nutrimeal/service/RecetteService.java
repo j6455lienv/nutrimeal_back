@@ -21,7 +21,7 @@ import com.example.nutrimeal.model.RecetteIngredient;
 import com.example.nutrimeal.repository.RecetteRepository;
 
 import utils.Constantes;
-import utils.MethodesPratiques;
+import utils.handleNumbers;
 
 @Service
 public class RecetteService {
@@ -132,15 +132,15 @@ public class RecetteService {
 
     List<Double> apports = calculNutrimentsParRecette_So_Fe_VitC_VitD_VitB12(recette);
 
-    recette.setSodiumParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+    recette.setSodiumParPortion(handleNumbers.get(
         apports.get(0) * 100d / Constantes.SODIUM));
-    recette.setFerParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+    recette.setFerParPortion(handleNumbers.get(
         apports.get(1) * 100d / Constantes.FER));
-    recette.setVitamineCParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+    recette.setVitamineCParPortion(handleNumbers.get(
         apports.get(2) * 100d / Constantes.VITAMINE_C));
-    recette.setVitamineDParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+    recette.setVitamineDParPortion(handleNumbers.get(
         apports.get(3) * 100d / Constantes.VITAMINE_D));
-    recette.setVitamineB12ParPortion(MethodesPratiques.deuxChiffresSignificatifs(
+    recette.setVitamineB12ParPortion(handleNumbers.get(
         apports.get(4) * 100d / Constantes.VITAMINE_B12));
 
     return recette;
