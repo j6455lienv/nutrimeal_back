@@ -1,23 +1,15 @@
 package com.example.nutrimeal.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.nutrimeal.model.Recette;
 import com.example.nutrimeal.service.ExportService;
 
-/**
- * @author Gaetan Inidjel
- */
 @RestController
 public class ExportController {
 
@@ -47,11 +39,10 @@ public class ExportController {
    *
    * @param id l'id de la recette
    * @throws Exception   excep
-   * @throws IOException ioexcep
    */
-  @RequestMapping(value = "/recette/{id}/nbPersonnes/{nb}/pdf", method = RequestMethod.GET)
+  @GetMapping(path = "/recette/{id}/nbPersonnes/{nb}/pdf")
   public void exportPdfThisRecette(@PathVariable("id") Long id, @PathVariable("nb") Integer nb,
-                                   HttpServletResponse response) throws IOException, Exception {
+                                   HttpServletResponse response) throws Exception {
     response.setContentType("application/pdf; charset=UTF-8");
     response.setHeader("Content-Disposition", "attachment; filename=Recette.pdf");
     exportService.exportRecettePdf(response.getOutputStream(), id, nb);
